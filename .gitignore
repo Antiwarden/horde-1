@@ -2,3 +2,6 @@
 *.log
 *.txt
 *.dat
+
+# Ignore all pictures from being tracked too
+*.png
