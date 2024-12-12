@@ -1,0 +1,8 @@
+# Ignore all log files from being tracked
+*.log
+*.txt
+*.dat
+
+# Ignore account, cd key and profile details
+d2bs/kolbot/data
+data/

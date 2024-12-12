@@ -1,0 +1,364 @@
+/**
+*	@filename	Town.js
+*	@author		Adpist
+*	@desc		Town functionnalities
+*	@credits	Adpist, JeanMax / SiC-666 / Dark-f, Alogwe, Imba, Kolton, Larryw, Noah, QQValpen, Sam, YGM
+*/
+
+var HordeTown = {
+	needUpdateLowestAct: false,
+	lastTownWpPosition: { x: 0, y: 0 },
+
+	goToTownWp: function () {
+		if (!me.inTown) {
+			Role.backToTown();
+		}
+
+		if (this.lastTownWpPosition.x !== me.x || this.lastTownWpPosition.y !== me.y) {
+			if (me.act === 5) {
+				Town.move("stash");
+			}
+
+			Town.move("waypoint");
+			Pather.moveTo(me.x + rand(-5, 5), me.y + rand(-5, 5)); // Move off of waypoint so others can reach it.
+
+			delay(me.ping * 2 + 50);
+			this.lastTownWpPosition.x = me.x;
+			this.lastTownWpPosition.y = me.y;
+		}
+	},
+
+	clearStash: function () {
+		let item = me.getItem(-1, 0);
+
+		do {
+			if (item.location == 7) {
+				let checkResult = NTIP.CheckItem(item, NTIP_CheckListNoTier, true);
+				let result = (checkResult.result > 0 && checkResult.result < 4) || Cubing.keepItem(item) || Runewords.keepItem(item) || CraftingSystem.keepItem(item) || HordeStorage.questItems.indexOf(item.classid) !== -1;
+
+				print("Item check result: " + JSON.stringify(checkResult));
+				print(Pickit.itemColor(item) + item.name.trim() + " result " + result);
+			}
+		} while (item.getNext());
+	},
+
+	lightChores: function () {
+		if (!me.inTown) {
+			Role.backToTown();
+		}
+
+		Quest.checkAndUseConsumable();
+		HordeStorage.stashQuestItems();
+		Town.heal();
+		Town.fillTome(518);
+
+		if (Config.FieldID) {
+			Town.fillTome(519);
+		}
+
+		Town.buyPotions();
+		Town.buyKeys();
+
+		if (me.gametype !== 0) {
+			Town.reviveMerc();
+		}
+
+		this.goToTownWp();
+
+		if (!Party.waitSynchro("light_chores_done")) {
+			HordeDebug.logCriticalError("light chores", "light_chores_done synchro failed");
+			quit();
+		}
+	},
+
+	doChores: function (repair = false) {
+		if (!me.inTown) {
+			Role.backToTown();
+		}
+
+		let cancelFlags = [0x01, 0x02, 0x04, 0x08, 0x14, 0x16, 0x0c, 0x0f, 0x19, 0x1a];
+		let startTick = getTickCount()
+
+		if (HordeSettings.Debug.Verbose.chores) {
+			print("[ÿc5Debugÿc0] Start Town chores");
+		}
+
+		TeamData.save();
+
+		if (HordeSettings.Debug.Verbose.chores) {
+			print("[ÿc5Debugÿc0] Town chores prepare for sharing");
+		}
+
+		Attack.weaponSwitch(Attack.getPrimarySlot());
+
+		if (Sharing.isGearSharingEnabled()) {
+			this.doSharingChores(repair);
+		} else {
+			this.doNoSharingChores(repair);
+		}
+
+		if (Config.SortInventory) {
+			Town.sortInventory();
+		}
+
+		if (me.gametype !== 0) {
+			Role.mercCheck();
+		}
+
+		for (let i = 0; i < cancelFlags.length; i += 1) {
+			if (getUIFlag(cancelFlags[i])) {
+				delay(500);
+				me.cancel();
+
+				break;
+			}
+		}
+
+		me.cancel();
+
+		Town.goToTown(Party.lowestAct);
+		this.goToTownWp();
+
+		if (HordeSettings.logChar) {
+			MuleLogger.logChar();
+		}
+
+		if (HordeSettings.Debug.Verbose.chores) {
+			print("[ÿc5Debugÿc0] Town chores wait all done");
+		}
+
+		if (!Party.waitSynchro("chores_done")) {
+			HordeDebug.logCriticalError("town chores", "chores_done synchro failed");
+			quit();
+		}
+
+		if (HordeSettings.Debug.Verbose.chores) {
+			if (Role.isLeader) {
+				HordeDebug.logScriptInfo("TownChores", "town chores total time: " + (getTickCount() - startTick) + " ms");
+			}
+
+			print("[ÿc5Debugÿc0] Town chores done");
+		}
+
+		return true;
+	},
+
+	doSharingChores: function (repair = false) {
+
+		let prepareTick = getTickCount();
+
+		if (HordeSettings.Debug.Verbose.chores) {
+			print("[ÿc5Debugÿc0] Town chores with sharing");
+		}
+
+		//Restaure status, id items & craft
+		Quest.checkAndUseConsumable();
+		HordeStorage.stashQuestItems();
+
+		Town.heal();
+		Town.identify(Sharing.isGearSharingEnabled());
+		Town.buyPotions();
+		Town.buyKeys();
+		Town.fillTome(518);
+		Town.repair(repair);
+
+		if (me.gametype !== 0) {
+			Town.reviveMerc();
+		}
+
+		Cubing.doCubing();
+		Runewords.makeRunewords();
+		//this.clearStash();
+
+		this.goToTownWp();
+
+		if (HordeSettings.Debug.Verbose.chores) {
+			print("[ÿc5Debugÿc0] Town chores wait all prepared");
+		}
+
+		if (!Party.waitSynchro("begin_gearing")) {
+			HordeDebug.logCriticalError("town chores", "begin_gearing synchro failed");
+			quit();
+		}
+
+		if (HordeSettings.Debug.Verbose.chores) {
+
+			if (Role.isLeader) {
+				print("[ÿc5Debugÿc0] Prepare sharing time: " + (getTickCount() - prepareTick) + " ms");
+			}
+
+			print("[ÿc5Debugÿc0] Town chores gear sharing");
+		}
+
+		// Share gear & try auto equip
+		let gearTick = getTickCount();
+
+		Sharing.shareGear();
+		Pickit.pickItems();
+		Item.autoEquip();
+
+		if (me.gametype !== 0) {
+			Item.autoEquipMerc();
+		}
+
+		if (HordeSettings.Debug.Verbose.chores && Role.isLeader) {
+			HordeDebug.logScriptInfo("TownChores", "gear sharing time: " + (getTickCount() - gearTick) + " ms");
+		}
+
+		// Update highest town
+		if (this.needUpdateLowestAct) {
+			if (HordeSettings.Debug.Verbose.chores) {
+				print("[ÿc5Debugÿc0] Town chores update lowest act");
+			}
+
+			let lowestActTick = getTickCount();
+
+			Quest.goToHighestTown();
+			Party.updateLowestAct();
+
+			if (HordeSettings.Debug.Verbose.chores) {
+				if (Role.isLeader) {
+					print("[ÿc5Debugÿc0] Update lowest act: " + (getTickCount() - lowestActTick) + " ms");
+				}
+
+				print("[ÿc5Debugÿc0] Town chores wait all ready selling");
+			}
+
+			this.goToTownWp();
+
+			this.needUpdateLowestAct = false;
+		}
+
+		if (HordeSettings.Debug.Verbose.chores) {
+			print("Town chores start selling");
+		}
+
+		// Sell Inventory
+		Town.clearInventory(true);
+		HordeStorage.removeUnwearableItems();
+		HordeStorage.organize();
+
+		if (HordeSettings.Debug.Verbose.chores) {
+			print("[ÿc5Debugÿc0] Town chores share gold");
+		}
+
+		// Share gold if needed
+		Sharing.shareGold();
+
+		this.goToTownWp();
+
+		if (HordeSettings.Debug.Verbose.chores) {
+			print("[ÿc5Debugÿc0] Town chores Process shopping");
+		}
+
+		// Go back to highest town & shop
+		Quest.goToHighestTown();
+		Town.shopItems();
+		Town.fillTome(518);
+
+		if (Config.FieldID) {
+			Town.fillTome(519);
+		}
+
+		Town.buyPotions();
+		Town.buyKeys();
+		Town.repair(repair);
+		Town.gamble();//need to update this to check against other players pickits
+
+		Town.stash(true);
+		Town.clearScrolls();
+	},
+
+	doNoSharingChores: function (repair = false) {
+
+		if (HordeSettings.Debug.Verbose.chores) {
+			print("[ÿc5Debugÿc0] Town chores no sharing");
+		}
+
+		//Restaure status, id items & craft
+		Quest.checkAndUseConsumable();
+		HordeStorage.stashQuestItems();
+
+		Town.heal();
+		Town.identify(Sharing.isGearSharingEnabled());
+		Town.buyPotions();
+		Town.buyKeys();
+		Town.repair(repair);
+		Item.autoEquip();
+
+		if (me.gametype !== 0) {
+			Item.autoEquipMerc();
+		}
+
+		//Sell Inventory
+		Town.clearInventory(true);
+		HordeStorage.removeUnwearableItems();
+
+		Town.shopItems();
+		Town.fillTome(518);
+
+		if (Config.FieldID) {
+			Town.fillTome(519);
+		}
+
+		Town.gamble(); // Need to update this to check against other players pickits
+
+		Town.stash(true);
+		HordeStorage.organize();
+		Town.clearScrolls();
+
+		if (me.gametype !== 0) {
+			Town.reviveMerc();
+		}
+
+		Cubing.doCubing();
+		Runewords.makeRunewords();
+
+		//this.clearStash();
+		Item.autoEquip();
+
+		if (me.gametype !== 0) {
+			Item.autoEquipMerc();
+		}
+
+		// Update highest town
+		if (this.needUpdateLowestAct) {
+			if (HordeSettings.Debug.Verbose.chores) {
+				print("Town chores update lowest act");
+			}
+
+			let lowestActTick = getTickCount();
+
+			Quest.goToHighestTown();
+			Party.updateLowestAct();
+
+			if (HordeSettings.Debug.Verbose.chores) {
+				if (Role.isLeader) {
+					print("[ÿc5Debugÿc0] Update lowest act: " + (getTickCount() - lowestActTick) + " ms");
+				}
+				print("[ÿc5Debugÿc0] Town chores wait all ready selling");
+			}
+
+			this.goToTownWp();
+
+			this.needUpdateLowestAct = false;
+		}
+
+		if (HordeSettings.Debug.Verbose.chores) {
+			print("Town chores share gold");
+		}
+
+		// Share gold if needed
+		Sharing.shareGold();
+
+		Town.buyPotions();
+		Town.buyKeys();
+		Town.repair(repair);
+		Town.fillTome(518);
+
+		this.goToTownWp();
+
+		// Go back to highest town & shop
+		Quest.goToHighestTown();
+	},
+};

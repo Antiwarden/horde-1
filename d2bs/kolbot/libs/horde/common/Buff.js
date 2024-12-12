@@ -1,0 +1,350 @@
+/**
+*	@filename	Buff.js
+*	@author		Adpist
+*	@desc		Buffing: Battle Orders, Antidotes etc.
+*	@credits	Adpist, JeanMax / SiC-666 / Dark-f, Alogwe, Imba, Kolton, Larryw, Noah, QQValpen, Sam, YGM
+*/
+
+var Buff = {
+	boing: 0,
+	boed: 0,
+	goBo: 0,
+	toldBarb: false,
+	readyToDrink: 0,
+	
+	/* TODO WIP
+	boWps = [{index: 29, area: 107}
+			 {index: 8, area: 35},
+			 {index: 0, area: 1}],
+			 
+	getMyBoWaypoint: function() {		
+		for (var i = 0 ; i < this.boWps.length ; i += 1) {
+			if (getWaypoint(this.boWps[i].index)) {
+				return i;
+			}
+		}
+		
+		return this.boWps.length - 1;
+	},
+	
+	teamBo: function() {
+		if (HordeSystem.teamSize === 1) {
+			return;
+		}
+		
+		if (HordeSystem.boProfile !== "") {
+			if (Role.boChar) {
+				if (canBo) {
+					//Wait for all teammate answers to see if we do bo or skip
+				} else {
+					//skip bo
+				}
+			} else {
+				//All profiles send to bo profile if they need or not
+			}
+			
+			if (doBo) {
+				//All give highest bo location
+				
+				//Pick lowest available bo location
+				
+				//go to location
+				
+				//bo
+			}
+		}
+	},*/
+
+	giveBo: function () {
+		let usingWaypoint = true;
+		let preArea = me.area;
+
+		if (Party.lowestAct < 2) {
+			usingWaypoint = false;
+			Town.goToTown(1);
+
+			while (me.area === 1) { // Be sure to enter Blood Moor.
+				Pather.moveToExit(2, true, false);
+
+				delay(me.ping * 2 + 250);
+
+				Packet.flash(me.gid);
+
+				delay(me.ping * 2 + 250);
+			}
+		} else {
+			getWaypoint(29) && Party.lowestAct >= 4 ? Pather.useWaypoint(107) : Pather.useWaypoint(35);	// 35 = Catacombs Lvl 2; 107 = River of Flame		
+		}
+
+		let waypoint;
+
+		if (usingWaypoint) {
+			while (!waypoint) {
+				waypoint = getUnit(2, "waypoint");
+				delay(250);
+			}
+		}
+		
+		Party.waitForMembers();
+		
+		if (usingWaypoint) {
+			while (getDistance(me, waypoint) < 5) { // Be sure to move off the waypoint.
+				Pather.walkTo(me.x + rand(5, 15), me.y);
+
+				delay(me.ping * 2 + 500);
+
+				Packet.flash(me.gid);
+
+				delay(me.ping * 2 + 500);
+			}
+		}
+
+		Role.goToLeader();
+		Precast.doPrecast(true);
+
+		for (let i = 0; i < 2; i += 1) {
+			if (this.boed === (HordeSystem.teamSize - 1)) {
+				break;
+			}
+
+			this.Bo();
+			delay(me.ping * 2 + 500);
+		}
+
+		Communication.sendToList(HordeSystem.allTeamProfiles, "I'm bored -.-");
+
+		if (Party.lowestAct < 2) {
+			if (!Pather.moveToExit(1, true)) {
+				Town.goToTown();
+			}
+
+			Town.move("waypoint");
+		} else {
+			Pather.useWaypoint(preArea);
+		}
+
+		return true;
+	},
+
+	beBo: function () {
+		let usingWaypoint = true;
+		let preArea = me.area;
+
+		if (Party.lowestAct < 2) {
+			Town.goToTown(1);
+			usingWaypoint = false;
+
+			while (me.area === 1) { // Be sure to enter Blood Moor.
+				Pather.moveToExit(2, true, false);
+
+				delay(me.ping * 2 + 250);
+
+				Packet.flash(me.gid);
+
+				delay(me.ping * 2 + 250);
+			}
+
+		} else {
+			getWaypoint(29) && Party.lowestAct >= 4 ? Pather.useWaypoint(107) : Pather.useWaypoint(35);	// 35 = Catacombs lvl 2; 107 = River of Flame
+			
+		}
+		
+		let waypoint;
+		
+		if (usingWaypoint) {
+			while (!waypoint) {
+				waypoint = getUnit(2, "waypoint");
+
+				delay(250);
+			}
+		}
+		
+		Party.waitForMembers();
+
+		if (usingWaypoint) {
+			while (getDistance(me, waypoint) < 5) { // Be sure to move off the waypoint.
+				let coord = CollMap.getRandCoordinate(me.x, -5, 5, me.y, -5, 5);
+				Pather.moveTo(coord.x, coord.y);
+				//Pather.walkTo(me.x + rand(5, 15), me.y);
+
+				delay(me.ping * 2 + 500);
+
+				Packet.flash(me.gid);
+
+				delay(me.ping * 2 + 500);
+			}
+		}
+
+		var j = 0;
+
+		while (this.goBo !== 1) {
+			delay(250);
+
+			if (!this.toldBarb && me.getState(32) && me.getState(26)) {
+				Communication.sendToList(HordeSystem.allTeamProfiles, "I'm Boed!");
+				this.toldBarb = true;
+			}
+
+			if (j % 20 == 0) { // Check for Team Members every 5 seconds.
+				Party.wholeTeamInGame();
+			}
+
+			j += 1;
+		}
+
+		if (Party.lowestAct < 2) {
+			if (!Pather.moveToExit(1, true)) {
+				Town.goToTown();
+			}
+
+			Town.move("waypoint");
+		} else {
+			Pather.useWaypoint(preArea);
+		}
+
+		return true;
+	},
+
+	selfBo: function () {
+		if (Role.boChar) {
+			delay(500);
+
+			if (me.getSkill(138)) {
+				Skill.Cast(138, 0);
+			}
+
+			if (me.getSkill(146)) {
+				Skill.Cast(146, 0);
+			}
+
+			if (me.getSkill(155)) {
+				Skill.Cast(155, 0);
+			}
+
+			if (me.getSkill(149)) {
+				Skill.Cast(149, 0);
+			}
+		}
+
+		return true;
+	},
+	
+	Bo: function () {
+		Role.goToLeader();
+
+		if (Role.boChar) {
+			if (me.getSkill(138)) {
+				Skill.Cast(138, 0);
+			}
+
+			if (me.getSkill(146)) {
+				Skill.Cast(146, 0);
+			}
+
+			if (me.getSkill(155)) {
+				Skill.Cast(155, 0);
+			}
+
+			if (me.getSkill(149)) {
+				Skill.Cast(149, 0);
+			}
+		} else {
+			delay(me.ping * 2 + 1000);
+		}
+
+		return true;
+	},
+	
+	initialBo: function() {
+		if (Buff.boing === 1 && !Role.boChar) {
+			Buff.beBo(); // Very first Bo ingame?
+		}
+
+		if (Role.boChar && me.charlvl >= 24) {
+			Buff.giveBo(); // Same here?
+		}
+	},
+	
+	/** Goes to Town, buys three Antidote potions from Akara,
+	 *  drinks them, and returns to Catacombs Level 4.
+	 */
+	prebuffPoisonRes: function() {
+		print("[ÿc:Buff.jsÿc0] Buying Antidote Potions from Akara");
+
+		Town.goToTown(1);
+		Town.move("akara");
+
+		let akara = getUnit(1, "akara");
+
+		if (akara) {
+			akara.startTrade();
+
+			let potions = akara.getItem(514); // 514 = Antidote Potion
+
+			for (let i = 0 ; i < 3 ; i += 1) {
+				potions.buy();
+			}
+
+			me.cancel();
+		}
+
+		Town.move("portalspot");
+
+		Party.waitSynchro("buff_poison", 30000);
+
+		let potions = me.findItems(514, -1, 3); // 514 = Antidote Potion
+
+		if (potions.length) {
+			for (let i = 0; i < potions.length; i += 1) {
+				potions[i].interact();
+				delay(me.ping * 2 + 500);
+			}
+		}
+
+		if (Role.teleportingChar && me.diff > 0) {
+			return true;
+		} else {
+			Pather.usePortal(37, null);
+		}
+
+		print("[ÿc:Buff.jsÿc0] Done buying Antidote Potions from Akara");
+		return true;
+	},
+	
+	raiseSkeletonArmy: function() {	
+		if (!me.getQuest(1, 0) || (me.diff === 0 /*&& TODO add AND mephisto not done*/)) {
+			return;
+		}
+		
+		let wasTeleporting = Pather.teleport;
+		if (getWaypoint(1)) {
+			print("[ÿc:Buff.jsÿc0] Raise skeleton army");
+			
+			Pather.useWaypoint(3);
+			
+			Party.waitForMembers(me.area, 2);
+			
+			Precast.doPrecast(true);
+		
+			delay(5000);
+			
+			Pather.teleport = false;
+			Pather.moveToExit(2, true, true);
+			
+			Party.waitForMembers(me.area, 8);
+			
+			Travel.safeMoveToExit(8, true, true);
+			
+			Pather.teleport = wasTeleporting;
+			
+			Party.waitForMembers();
+			
+			Buff.selfBo();
+			Precast.doPrecast(true);
+		
+			delay(5000);
+			
+			Town.goToTown();
+		}
+	}
+};
