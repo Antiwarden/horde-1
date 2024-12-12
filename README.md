@@ -1,3 +1,20 @@
+This repository is a setup for Adpist's Kolbot project ``horde``, see: https://github.com/Adpist/horde
+
+Before starting with the following steps, please note that this setup is designed for a 4-man team consisting of a Meteorb Sorceress, Hammerdin, a Wind Druid, and Whirlwind Barbarian. This team can defeat Baal in hell sub 40 hours of playtime. Just keep an eye on your team and the High Council when doing the Travincal quest.
+
+Happy Reset Day on December 14, 2024 :-)
+
+# Step 1:
+Go to ``horde-1\d2bs\kolbot\libs\config...`` and rename the field ``test`` in ``Sorceress.test.js``, ``Paladin.test.js``, ``Druid.test.js`` and ``Barbarian.test.js`` with the desired names for your characters.
+
+# Step 2:
+Go to ``horde-1\d2bs\kolbot\libs\horde\settings\teams...`` and open the team configuration file called ``Reset.js``. Add profile names, account names, and character names there.
+
+# Step 3:
+Add the cd-keys, profiles, etc. manually in the D2BS-Manager or simply copy over your old files ``profiles.json`` and/or ``cdkeys.json`` into ``horde-1\data``.
+
+#############################################################################################################
+
 # This repo will remain for stable releases new development will continue at https://github.com/blizzhackers/
 
 * This repository will get periodic updates, security fixes, and accept critical pull requests only
