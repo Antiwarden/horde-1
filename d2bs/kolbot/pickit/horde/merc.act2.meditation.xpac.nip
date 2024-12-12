@@ -1,22 +1,24 @@
-// Weapon
-// meditationaura > ll > ias > res > damage
-([type] == spear || [type] == polearm) && [Quality] <= magic && [flag] != runeword # # [MercTier] == /*meditationaura*/((item.getStatEx(151,120)) * 10000) + /*lifeleech*/((item.getStatEx(60)) * 10000) + /*ias*/((item.getStatEx(93)) * 1000) + /*fr+cr+lr*/((item.getStatEx(39) + item.getStatEx(41) + item.getStatEx(43)) * 100) + /*maxdamage*/((item.getStatEx(24)) * 1)
-([type] == spear || [type] == polearm) && ([Quality] >= set || [flag] == runeword) # # [MercTier] == /*meditationaura*/((item.getStatEx(151,120)) * 1000000) + /*lifeleech*/((item.getStatEx(60)) * 100000) + /*ias*/((item.getStatEx(93)) * 10000) + /*fr+cr+lr*/((item.getStatEx(39) + item.getStatEx(41) + item.getStatEx(43)) * 1000) + /*maxdamage*/((item.getStatEx(24)) * 1)
+//-----------------------------------------------------------------------------------------------------
+// merc.act2.meditation.xpax.nip
+//-----------------------------------------------------------------------------------------------------
 
-//Insight progression normal to elite eth
-([type] == spear || [type] == polearm) && [flag] == runeword && [class] == normal # [meditationaura] >= 12 # [MercTier] == 50000000 + /*meditationaura*/((item.getStatEx(151,120)) * 1000000) + /*lifeleech*/((item.getStatEx(60)) * 100000) + /*ias*/((item.getStatEx(93)) * 10000) + /*fr+cr+lr*/((item.getStatEx(39) + item.getStatEx(41) + item.getStatEx(43)) * 1000) + /*maxdamage*/((item.getStatEx(24)) * 1)
-([type] == spear || [type] == polearm) && [flag] == runeword && [class] == exceptional # [meditationaura] >= 12 # [MercTier] == 100000000 + /*meditationaura*/((item.getStatEx(151,120)) * 1000000) + /*lifeleech*/((item.getStatEx(60)) * 100000) + /*ias*/((item.getStatEx(93)) * 10000) + /*fr+cr+lr*/((item.getStatEx(39) + item.getStatEx(41) + item.getStatEx(43)) * 1000) + /*maxdamage*/((item.getStatEx(24)) * 1)
-([type] == spear || [type] == polearm) && [flag] == runeword && [class] == elite && [flag] != ethereal # [meditationaura] >= 12 # [MercTier] == 150000000 + /*meditationaura*/((item.getStatEx(151,120)) * 1000000) + /*lifeleech*/((item.getStatEx(60)) * 100000) + /*ias*/((item.getStatEx(93)) * 10000) + /*fr+cr+lr*/((item.getStatEx(39) + item.getStatEx(41) + item.getStatEx(43)) * 1000) + /*maxdamage*/((item.getStatEx(24)) * 1)
-([type] == spear || [type] == polearm) && [flag] == runeword && [class] == elite && [flag] == ethereal # [meditationaura] >= 12 # [MercTier] == 200000000 + /*meditationaura*/((item.getStatEx(151,120)) * 1000000) + /*lifeleech*/((item.getStatEx(60)) * 100000) + /*ias*/((item.getStatEx(93)) * 10000) + /*fr+cr+lr*/((item.getStatEx(39) + item.getStatEx(41) + item.getStatEx(43)) * 1000) + /*maxdamage*/((item.getStatEx(24)) * 1)
+// Weapon (meditation aura > lifeleech > ias > res > dmg)
+([type] == spear || [type] == polearm) && [quality] <= magic && [flag] != runeword ## [merctier] == /*MEDITATIONAURA*/((item.getStatEx(151, 120)) * 10000) + /*LIFELEECH*/((item.getStatEx(60)) * 10000) + /*IAS*/((item.getStatEx(93)) * 1000) + /*FR+CR+LR*/((item.getStatEx(39) + item.getStatEx(41) + item.getStatEx(43)) * 100) + /*MAXDMG*/((item.getStatEx(24)) * 1)
+([type] == spear || [type] == polearm) && ([quality] >= set || [flag] == runeword) ## [merctier] == /*MEDITATIONAURA*/((item.getStatEx(151, 120)) * 1000000) + /*LIFELEECH*/((item.getStatEx(60)) * 100000) + /*IAS*/((item.getStatEx(93)) * 10000) + /*FR+CR+LR*/((item.getStatEx(39) + item.getStatEx(41) + item.getStatEx(43)) * 1000) + /*MAXDMG*/((item.getStatEx(24)) * 1)
 
-// Head
-// ll > allsk > ias > str+dex > def
-[type] == helm && [Quality] <= magic && [flag] != runeword # # [MercTier] == /*lifeleech*/(item.getStatEx(60) * 10000) + /*allskill*/((item.getStatEx(127)) * 10000) + /*ias*/(item.getStatEx(93) * 1000) + /*str+dex*/((item.getStatEx(0) + item.getStatEx(2)) * 100) + /*defense*/(item.getStatEx(31) * 1)
-[type] == helm && ([Quality] >= set || [flag] == runeword) # # [MercTier] == /*lifeleech*/(item.getStatEx(60) * 100000) + /*allskill*/((item.getStatEx(127)) * 100000) + /*ias*/(item.getStatEx(93) * 10000) + /*str+dex*/((item.getStatEx(0) + item.getStatEx(2)) * 1000) + /*defense*/(item.getStatEx(31) * 1)
+// Insight (progression from normal to elite eth)
+([type] == polearm) && [flag] == runeword && [class] == normal # [meditationaura] >= 12 # [merctier] == 50000000 + /*MEDITATION AURA*/((item.getStatEx(151, 120)) * 1000000) + /*LIFELEECH*/((item.getStatEx(60)) * 100000) + /*IAS*/((item.getStatEx(93)) * 10000) + /*FR+CR+LR*/((item.getStatEx(39) + item.getStatEx(41) + item.getStatEx(43)) * 1000) + /*MAXDMG*/((item.getStatEx(24)) * 1)
+([type] == polearm) && [flag] == runeword && [class] == exceptional # [meditationaura] >= 12 # [merctier] == 100000000 + /*MEDITATION AURA*/((item.getStatEx(151,120)) * 1000000) + /*LIFELEECH*/((item.getStatEx(60)) * 100000) + /*IAS*/((item.getStatEx(93)) * 10000) + /*FR+CR+LR*/((item.getStatEx(39) + item.getStatEx(41) + item.getStatEx(43)) * 1000) + /*MAXDMG*/((item.getStatEx(24)) * 1)
+([type] == polearm) && [flag] == runeword && [class] == elite && [flag] != ethereal # [meditationaura] >= 12 # [merctier] == 150000000 + /*MEDITATION AURA*/((item.getStatEx(151, 120)) * 1000000) + /*lifeleech*/((item.getStatEx(60)) * 100000) + /*IAS*/((item.getStatEx(93)) * 10000) + /*FR+CR+LR*/((item.getStatEx(39) + item.getStatEx(41) + item.getStatEx(43)) * 1000) + /*MAXDMG*/((item.getStatEx(24)) * 1)
+([type] == polearm) && [flag] == runeword && [class] == elite && [flag] == ethereal # [meditationaura] >= 12 # [merctier] == 200000000 + /*MEDITATION AURA*/((item.getStatEx(151, 120)) * 1000000) + /*lifeleech*/((item.getStatEx(60)) * 100000) + /*IAS*/((item.getStatEx(93)) * 10000) + /*FR+CR+LR*/((item.getStatEx(39) + item.getStatEx(41) + item.getStatEx(43)) * 1000) + /*MAXDMG*/((item.getStatEx(24)) * 1)
 
-// Armor
-// skill > ias > res > def
-[type] == armor && [Quality] <= magic && [flag] != runeword # # [MercTier] == /*all+anyclass*/((item.getStatEx(127) + item.getStatEx(83)) * 10000) + /*ias*/((item.getStatEx(93)) * 1000) + /*fr+cr+lr*/((item.getStatEx(39) + item.getStatEx(41) + item.getStatEx(43)) * 100) + /*defense*/((item.getStatEx(31)) * 1)
-[type] == armor && ([Quality] >= set || [flag] == runeword) # # [MercTier] == /*all+anyclass*/((item.getStatEx(127) + item.getStatEx(83)) * 100000) + /*ias*/((item.getStatEx(93)) * 10000) + /*fr+cr+lr*/((item.getStatEx(39) + item.getStatEx(41) + item.getStatEx(43)) * 1000) + /*defense*/((item.getStatEx(31)) * 1)
-[type] == armor && ([flag] == runeword) && [flag] != ethereal # [ias] == 45 # [MercTier] == 50000000 //Treachery non eth 
-[type] == armor && ([flag] == runeword) && [flag] == ethereal # [ias] == 45 # [MercTier] == 100000000 //Treachery eth
+// Helms (lifeleech > all skills > ias > (str + dex) > def)
+[type] == helm && [Quality] <= magic && [flag] != runeword # # [merctier] == /*LIFELEECH*/(item.getStatEx(60) * 10000) + /*ALLSKILLS*/((item.getStatEx(127)) * 10000) + /*IAS*/(item.getStatEx(93) * 1000) + /*STR+DEX*/((item.getStatEx(0) + item.getStatEx(2)) * 100) + /*DEF*/(item.getStatEx(31) * 1)
+[type] == helm && ([Quality] >= set || [flag] == runeword) # # [merctier] == /*LIFELEECH*/(item.getStatEx(60) * 100000) + /*ALLSKILLS*/((item.getStatEx(127)) * 100000) + /*IAS*/(item.getStatEx(93) * 10000) + /*STR+DEX*/((item.getStatEx(0) + item.getStatEx(2)) * 1000) + /*DEF*/(item.getStatEx(31) * 1)
+
+// Armor (skill > ias > res > def)
+[type] == armor && [Quality] <= magic && [flag] != runeword # # [merctier] == /*ALLSKILLS+ANYCLASS*/((item.getStatEx(127) + item.getStatEx(83)) * 10000) + /*IAS*/((item.getStatEx(93)) * 1000) + /*FR+CR+LR*/((item.getStatEx(39) + item.getStatEx(41) + item.getStatEx(43)) * 100) + /*DEF*/((item.getStatEx(31)) * 1)
+[type] == armor && ([Quality] >= set || [flag] == runeword) # # [merctier] == /*ALLSKILLS+ANYCLASS*/((item.getStatEx(127) + item.getStatEx(83)) * 100000) + /*IAS*/((item.getStatEx(93)) * 10000) + /*FR+CR+LR*/((item.getStatEx(39) + item.getStatEx(41) + item.getStatEx(43)) * 1000) + /*DEF*/((item.getStatEx(31)) * 1)
+
+[type] == armor && ([flag] == runeword) && [flag] != ethereal # [ias] == 45 # [MercTier] == 50000000 // Treachery
+[type] == armor && ([flag] == runeword) && [flag] == ethereal # [ias] == 45 # [MercTier] == 100000000 // Ethereal Treachery
