@@ -1,7 +1,7 @@
 /**
 *	@filename	Buff.js
 *	@author		Adpist
-*	@desc		Buffing: Battle Orders, Antidotes etc.
+*	@desc			Buffing: Battle Orders, Antidotes etc.
 *	@credits	Adpist, JeanMax / SiC-666 / Dark-f, Alogwe, Imba, Kolton, Larryw, Noah, QQValpen, Sam, YGM
 */
 
@@ -11,53 +11,57 @@ var Buff = {
 	goBo: 0,
 	toldBarb: false,
 	readyToDrink: 0,
-	
-	/* TODO WIP
-	boWps = [{index: 29, area: 107}
-			 {index: 8, area: 35},
-			 {index: 0, area: 1}],
-			 
-	getMyBoWaypoint: function() {		
-		for (var i = 0 ; i < this.boWps.length ; i += 1) {
+
+	/* WIP
+	boWps: [
+		{ index: 29, area: 107 },
+		{ index: 8, area: 35 },
+		{ index: 0, area: 1 }
+	],
+
+	getMyBoWaypoint: function () {
+		for (var i = 0; i < this.boWps.length; i++) {
 			if (getWaypoint(this.boWps[i].index)) {
 				return i;
 			}
 		}
-		
+
 		return this.boWps.length - 1;
 	},
-	
-	teamBo: function() {
+
+	teamBo: function () {
 		if (HordeSystem.teamSize === 1) {
 			return;
 		}
-		
+
 		if (HordeSystem.boProfile !== "") {
 			if (Role.boChar) {
 				if (canBo) {
-					//Wait for all teammate answers to see if we do bo or skip
+					// Wait for all teammate answers to see if we do bo or skip
 				} else {
-					//skip bo
+					// skip bo
 				}
 			} else {
 				//All profiles send to bo profile if they need or not
 			}
-			
+
 			if (doBo) {
-				//All give highest bo location
-				
-				//Pick lowest available bo location
-				
-				//go to location
-				
-				//bo
+			// All give highest bo location
+
+			// Pick lowest available bo location
+
+			// Go to location
+
+			// Give bo
 			}
 		}
-	},*/
+	}, */
 
 	giveBo: function () {
 		let usingWaypoint = true;
 		let preArea = me.area;
+
+		print("[ÿc2Start doPrecastÿc0] :: Start giving Battle Orders")
 
 		if (Party.lowestAct < 2) {
 			usingWaypoint = false;
@@ -84,9 +88,9 @@ var Buff = {
 				delay(250);
 			}
 		}
-		
+
 		Party.waitForMembers();
-		
+
 		if (usingWaypoint) {
 			while (getDistance(me, waypoint) < 5) { // Be sure to move off the waypoint.
 				Pather.walkTo(me.x + rand(5, 15), me.y);
@@ -102,7 +106,7 @@ var Buff = {
 		Role.goToLeader();
 		Precast.doPrecast(true);
 
-		for (let i = 0; i < 2; i += 1) {
+		for (let i = 0; i < 2; i++) {
 			if (this.boed === (HordeSystem.teamSize - 1)) {
 				break;
 			}
@@ -112,6 +116,7 @@ var Buff = {
 		}
 
 		Communication.sendToList(HordeSystem.allTeamProfiles, "I'm bored -.-");
+		print("Bo-ed");
 
 		if (Party.lowestAct < 2) {
 			if (!Pather.moveToExit(1, true)) {
@@ -123,12 +128,15 @@ var Buff = {
 			Pather.useWaypoint(preArea);
 		}
 
+		print("[ÿc1End doPrecastÿc0] :: Battle Orders done")
 		return true;
 	},
 
 	beBo: function () {
 		let usingWaypoint = true;
 		let preArea = me.area;
+
+		print("[ÿc2Start doPrecastÿc0] :: Start getting Battle Orders")
 
 		if (Party.lowestAct < 2) {
 			Town.goToTown(1);
@@ -146,11 +154,11 @@ var Buff = {
 
 		} else {
 			getWaypoint(29) && Party.lowestAct >= 4 ? Pather.useWaypoint(107) : Pather.useWaypoint(35);	// 35 = Catacombs lvl 2; 107 = River of Flame
-			
+
 		}
-		
+
 		let waypoint;
-		
+
 		if (usingWaypoint) {
 			while (!waypoint) {
 				waypoint = getUnit(2, "waypoint");
@@ -158,7 +166,7 @@ var Buff = {
 				delay(250);
 			}
 		}
-		
+
 		Party.waitForMembers();
 
 		if (usingWaypoint) {
@@ -185,11 +193,13 @@ var Buff = {
 				this.toldBarb = true;
 			}
 
+			print("Got bo-ed");
+
 			if (j % 20 == 0) { // Check for Team Members every 5 seconds.
 				Party.wholeTeamInGame();
 			}
 
-			j += 1;
+			j++;
 		}
 
 		if (Party.lowestAct < 2) {
@@ -202,6 +212,7 @@ var Buff = {
 			Pather.useWaypoint(preArea);
 		}
 
+		print("[ÿc1End doPrecastÿc0] :: Battle Orders done")
 		return true;
 	},
 
@@ -228,7 +239,7 @@ var Buff = {
 
 		return true;
 	},
-	
+
 	Bo: function () {
 		Role.goToLeader();
 
@@ -254,8 +265,8 @@ var Buff = {
 
 		return true;
 	},
-	
-	initialBo: function() {
+
+	initialBo: function () {
 		if (Buff.boing === 1 && !Role.boChar) {
 			Buff.beBo(); // Very first Bo ingame?
 		}
@@ -264,11 +275,11 @@ var Buff = {
 			Buff.giveBo(); // Same here?
 		}
 	},
-	
+
 	/** Goes to Town, buys three Antidote potions from Akara,
 	 *  drinks them, and returns to Catacombs Level 4.
 	 */
-	prebuffPoisonRes: function() {
+	prebuffPoisonRes: function () {
 		print("[ÿc:Buff.jsÿc0] Buying Antidote Potions from Akara");
 
 		Town.goToTown(1);
@@ -281,7 +292,7 @@ var Buff = {
 
 			let potions = akara.getItem(514); // 514 = Antidote Potion
 
-			for (let i = 0 ; i < 3 ; i += 1) {
+			for (let i = 0; i < 3; i++) {
 				potions.buy();
 			}
 
@@ -295,7 +306,7 @@ var Buff = {
 		let potions = me.findItems(514, -1, 3); // 514 = Antidote Potion
 
 		if (potions.length) {
-			for (let i = 0; i < potions.length; i += 1) {
+			for (let i = 0; i < potions.length; i++) {
 				potions[i].interact();
 				delay(me.ping * 2 + 500);
 			}
@@ -310,40 +321,40 @@ var Buff = {
 		print("[ÿc:Buff.jsÿc0] Done buying Antidote Potions from Akara");
 		return true;
 	},
-	
-	raiseSkeletonArmy: function() {	
+
+	raiseSkeletonArmy: function () {
 		if (!me.getQuest(1, 0) || (me.diff === 0 /*&& TODO add AND mephisto not done*/)) {
 			return;
 		}
-		
+
 		let wasTeleporting = Pather.teleport;
 		if (getWaypoint(1)) {
 			print("[ÿc:Buff.jsÿc0] Raise skeleton army");
-			
+
 			Pather.useWaypoint(3);
-			
+
 			Party.waitForMembers(me.area, 2);
-			
+
 			Precast.doPrecast(true);
-		
+
 			delay(5000);
-			
+
 			Pather.teleport = false;
 			Pather.moveToExit(2, true, true);
-			
+
 			Party.waitForMembers(me.area, 8);
-			
+
 			Travel.safeMoveToExit(8, true, true);
-			
+
 			Pather.teleport = wasTeleporting;
-			
+
 			Party.waitForMembers();
-			
+
 			Buff.selfBo();
 			Precast.doPrecast(true);
-		
+
 			delay(5000);
-			
+
 			Town.goToTown();
 		}
 	}
