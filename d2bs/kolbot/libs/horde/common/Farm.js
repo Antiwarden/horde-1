@@ -46,9 +46,8 @@ var Farm = {
 		Precast.doPrecast(true);
 
 		if (!Role.boChar) {
-			delay(2500);
 			print("Got bo");
-			delay(2500);
+			delay(5000);
 		} else {
 			print("Bo-ed")
 		}
@@ -92,20 +91,8 @@ var Farm = {
 
 			Pather.teleport = false;
 
-			if (Role.boChar) {
-				print("[Start doPrecast] :: Giving Battle Orders");
-			} else {
-				print("[Start doPrecast] :: Getting Battle Orders");
-			}
-
 			Precast.doPrecast(true);
 			delay(2000);
-
-			if (Role.boChar) {
-				print("[End doPrecast] :: Battle Orders done");
-			} else {
-				print("[End doPrecast] :: Battle Orders done");
-			}
 
 			Attack.clearLevel(0);
 
