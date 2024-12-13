@@ -1,20 +1,18 @@
 /**
 *	@filename	Pickit.js
 *	@author		kolton
-*	@desc		handle item pickup
+*	@desc			Handle item pickup
 *	@credits	adpist (auto merc integration)
 */
 
 var Pickit = {
-	gidList: [],
-	beltSize: 1,
-	ignoreLog: [4, 5, 6, 22, 41, 76, 77, 78, 79, 80, 81], // Ignored item types for item logging
+		gidList: [],
+		beltSize: 1,
+		ignoreLog: [4, 5, 6, 22, 41, 76, 77, 78, 79, 80, 81], // Ignored item types for item logging
 
 	init: function (notify) {
-		var i, filename;
-
-		for (i = 0; i < Config.PickitFiles.length; i += 1) {
-			filename = "pickit/" + Config.PickitFiles[i];
+		for (let i = 0; i < Config.PickitFiles.length; i++) {
+			let filename = "pickit/" + Config.PickitFiles[i];
 
 			NTIP.OpenFile(filename, notify);
 		}
@@ -24,11 +22,11 @@ var Pickit = {
 
 	// Returns:
 	// -1 - Needs iding
-	// 0 - Unwanted
-	// 1 - NTIP wants
-	// 2 - Cubing wants
-	// 3 - Runeword wants
-	// 4 - Pickup to sell (triggered when low on gold)
+	//  0 - Unwanted
+	//  1 - NTIP wants
+	//  2 - Cubing wants
+	//  3 - Runeword wants
+	//  4 - Pickup to sell (triggered when low on gold)
 	checkItem: function (unit) {
 		var rval = NTIP.CheckItem(unit, false, true);
 
@@ -59,7 +57,7 @@ var Pickit = {
 				line: null
 			};
 		}
-		
+	
 		// POINTS BASED PICKIT
 		if ((NTIP.GetMercTier(unit) > 0 || NTIP.GetTier(unit) > 0) && !unit.getFlag(0x10)) {
 			return {
@@ -85,13 +83,15 @@ var Pickit = {
 					line: "Equip merc tier: " + NTIP.GetMercTier(unit)
 				};
 			}
+	
 			//print("ÿc4Checking " + Pickit.itemColor(unit) + unit.name.trim() + " ÿc0 vs no Tier pickit.");
 			rval = NTIP.CheckItem(unit, NTIP_CheckListNoTier, true);
 		}
 
-		// If total gold is less than 10k pick up anything worth 10 gold per
-		// square to sell in town.
-		if (rval.result === 0 && (Town.ignoredItemTypes.indexOf(unit.itemType) === -1 || unit.itemType === 38) && me.gold < Config.LowGold && unit.itemType !== 39) {
+		// If total gold is less than 10k pick up anything worth 10 gold per square to sell in town.
+		if (rval.result === 0
+			&& (Town.ignoredItemTypes.indexOf(unit.itemType) === -1 || unit.itemType === 38)
+			&& me.gold < Config.LowGold && unit.itemType !== 39) {
 			// Gold doesn't take up room, just pick it up
 			if (unit.classid === 523) {
 				return {
@@ -113,8 +113,8 @@ var Pickit = {
 
 	pickItems: function () {
 		var status, item, canFit,
-			needMule = false,
-			pickList = [];
+				needMule = false,
+				pickList = [];
 
 		Town.clearBelt();
 
@@ -126,91 +126,90 @@ var Pickit = {
 			delay(40);
 		}
 
-		item = getUnit(4);
+		try {
+			item = getUnit(4);
 
-		if (item) {
-			do {
-				if ((item.mode === 3 || item.mode === 5) && getDistance(me, item) <= Config.PickRange) {
-					pickList.push(copyUnit(item));
-				}
-			} while (item.getNext());
-		}
-
-		while (pickList.length > 0) {
-			if (me.dead) {
-				return false;
+			if (item) {
+				do {
+					if ((item.mode === 3 || item.mode === 5) && getDistance(me, item) <= Config.PickRange) {
+						pickList.push(copyUnit(item)); // Create a copy to avoid modifying the original unit
+					}
+				} while (item.getNext());
 			}
 
-			pickList.sort(this.sortItems);
+			while (pickList.length > 0) {
+				if (me.dead) {
+					return false;
+				}
+			
+				pickList.sort(this.sortItems);
 
-			// Check if the item unit is still valid and if it's on ground or being dropped
-			if (copyUnit(pickList[0]).x !== undefined && (pickList[0].mode === 3 || pickList[0].mode === 5) &&
-					(Pather.useTeleport() || me.inTown || !checkCollision(me, pickList[0], 0x1))) { // Don't pick items behind walls/obstacles when walking
-				// Check if the item should be picked
-				status = this.checkItem(pickList[0]);
+				// Validate the first item in the list: Check if it's still on the ground or being dropped
+				if (pickList[0] && copyUnit(pickList[0]).x !== undefined
+					&& (pickList[0].mode === 3 // Item on ground
+					|| pickList[0].mode === 5) // Item being dropped
+					&& (Pather.useTeleport() || me.inTown || !checkCollision(me, pickList[0], 0x1))) {
 
-				if (status.result && this.canPick(pickList[0]) /*&& Item.autoEquipCheck(pickList[0])*/) {
-					if (pickList[0].gid !== undefined) { // Make sure it still exists (not disappeared or picked by another player)
-						// Override canFit for scrolls, potions and gold
-						canFit = pickList[0].gid !== undefined && (Storage.Inventory.CanFit(pickList[0]) || [4, 22, 76, 77, 78].indexOf(pickList[0].itemType) > -1);
+					status = this.checkItem(pickList[0]); // Assess the item for pickup suitability
 
-						// Try to make room with FieldID
-						if (!canFit && Config.FieldID && Town.fieldID()
-							&& copyUnit(pickList[0]).gid !== undefined) { // Make sure it didn't disappear (happens with potions with 2+ bots)
-							//delay(me.ping > 0 ? me.ping * 2 : 50); // TODO: determine if this resolves undefined errors coming back from FindSpot and avoids extra muling
+					// Check if the item can and should be picked
+					if (status.result && this.canPick(pickList[0]) /*&& Item.autoEquipCheck(pickList[0])*/) {
+						if (pickList[0].gid !== undefined) {
+						
+							// Determine if the item can fit in the inventory
 							canFit = pickList[0].gid !== undefined && (Storage.Inventory.CanFit(pickList[0]) || [4, 22, 76, 77, 78].indexOf(pickList[0].itemType) > -1);
-					}
-
-					// Try to make room by selling items in town
-					if (!canFit) {
-						// Check if any of the current inventory items can be stashed or need to be identified and eventually sold to make room
-						if (this.canMakeRoom()) {
-							print("Trying to make room for " + this.itemColor(pickList[0]) + pickList[0].name.trim());
-
-							// Go to town and do town chores
-							if (Town.visitTown()) {
-								// Recursive check after going to town. We need to remake item list because gids can change.
-								// Called only if room can be made so it shouldn't error out or block anything.
-
-								return this.pickItems();
+						
+							// Attempt to make room using FieldID
+							if (!canFit && Config.FieldID && Town.fieldID() && copyUnit(pickList[0]).gid !== undefined) {
+								canFit = pickList[0].gid !== undefined && (Storage.Inventory.CanFit(pickList[0]) || [4, 22, 76, 77, 78].indexOf(pickList[0].itemType) > -1);
 							}
 
-							// Town visit failed - abort
-							print("[ÿc9Warningÿc0] Not enough room for " + this.itemColor(pickList[0]) + pickList[0].name.trim());
+							if (!canFit) { // If room can't be made, log a warning and attempt AutoMule
+								if (this.canMakeRoom()) {
+									print("Trying to make room for " + this.itemColor(pickList[0]) + (pickList[0].name || "unknown").trim());
+								
+									if (Town.visitTown()) {
+										return this.pickItems(); // Restart the pickup process after making room
+									}
 
-							return false;
-						}
+									print("[ÿc9Warningÿc0] Not enough room for " + this.itemColor(pickList[0]) + (pickList[0].name || "unknown").trim());
+									return false;
+								}
 
-						// Can't make room - trigger automule
-						Misc.itemLogger("No room for", pickList[0]);
-						print("[ÿc9Warningÿc0] Not enough room for " + this.itemColor(pickList[0]) + pickList[0].name.trim());
+								// Log and handle if AutoMule is needed
+								Misc.itemLogger("No room for", pickList[0]);
+								print("[ÿc9Warningÿc0] Not enough room for " + this.itemColor(pickList[0]) + (pickList[0].name || "unknown").trim());
 
-						needMule = true;
-					}
+								needMule = true;
+							}
 
-					// Item can fit - pick it up
-						if (canFit && copyUnit(pickList[0]).gid !== undefined) {
-						this.pickItem(pickList[0], status.result, status.line);
-						} else if (!canFit && copyUnit(pickList[0]).gid !== undefined) {
-						// Inventory is full
-						} else { // The item is undefined (disappeared or picked by another player)
-							print("[ÿc9Warningÿc0] Failed to pick item: " + pickList[0].classid);
+							// If room is available, pick up the item
+							if (canFit && copyUnit(pickList[0]).gid !== undefined) {
+								this.pickItem(pickList[0], status.result, status.line);
+							} else if (!canFit && copyUnit(pickList[0]).gid !== undefined) {
+								print("[ÿc8Pickit.jsÿc0] Inventory is full, no action taken for this item.");
+							} else {
+								print("[ÿc9Warningÿc0] Failed to pick item: " + (pickList[0].classid || "unknown"));
+							}
 						}
 					}
 				}
+				// Remove the processed item from the list
+				pickList.shift();
 			}
 
-			pickList.shift();
+			// Check for mule info and broadcast mule-related scripts if items need to be moved
+			if (needMule && AutoMule.getInfo() && AutoMule.getInfo().hasOwnProperty("muleInfo") && AutoMule.getMuleItems().length > 0) {
+				scriptBroadcast("mule");
+				scriptBroadcast("quit");
+			}
+		} catch (e) {
+			print("[ÿc9Errorÿc0] Error in Pickit.js: Exception during pickItems: " + e.message);
+			return false;
 		}
-
-		// Quit current game and transfer the items to mule
-		if (needMule && AutoMule.getInfo() && AutoMule.getInfo().hasOwnProperty("muleInfo") && AutoMule.getMuleItems().length > 0) {
-			scriptBroadcast("mule");
-			scriptBroadcast("quit");
-		}
-
-		return true;
-	},
+	
+			return true;
+		},
 
 	// Check if we can even free up the inventory
 	canMakeRoom: function () {
@@ -218,11 +217,10 @@ var Pickit = {
 			return false;
 		}
 
-		var i,
-			items = Storage.Inventory.Compare(Config.Inventory);
+		let items = Storage.Inventory.Compare(Config.Inventory);
 
 		if (items) {
-			for (i = 0; i < items.length; i += 1) {
+			for (let i = 0; i < items.length; i++) {
 				switch (this.checkItem(items[i]).result) {
 				case -1: // Item needs to be identified
 					// For low level chars that can't actually get id scrolls -> prevent an infinite loop
@@ -259,8 +257,8 @@ var Pickit = {
 		}
 
 		var i, item, tick, gid, stats,
-			cancelFlags = [0x01, 0x08, 0x14, 0x0c, 0x19, 0x1a],
-			itemCount = me.itemcount;
+				cancelFlags = [0x01, 0x08, 0x14, 0x0c, 0x19, 0x1a],
+				itemCount = me.itemcount;
 
 		if (unit.gid) {
 			gid = unit.gid;
@@ -271,7 +269,7 @@ var Pickit = {
 			return false;
 		}
 
-		for (i = 0; i < cancelFlags.length; i += 1) {
+		for (i = 0; i < cancelFlags.length; i++) {
 			if (getUIFlag(cancelFlags[i])) {
 				delay(500);
 				me.cancel(0);
@@ -283,7 +281,7 @@ var Pickit = {
 		stats = new ItemStats(item);
 
 		MainLoop:
-		for (i = 0; i < 3; i += 1) {
+		for (i = 0; i < 3; i++) {
 			if (!getUnit(4, -1, -1, gid)) {
 				break MainLoop;
 			}
@@ -411,29 +409,29 @@ var Pickit = {
 
 		if (type) {
 			switch (unit.itemType) {
-			case 4: // gold
+			case 4: // Gold
 				return "ÿc4";
-			case 74: // runes
+			case 74: // Runes
 				return "ÿc8";
-			case 76: // healing potions
+			case 76: // Healing Potions
 				return "ÿc1";
-			case 77: // mana potions
+			case 77: // Mana Potions
 				return "ÿc3";
-			case 78: // juvs
+			case 78: // Rejuvination Potions
 				return "ÿc;";
 			}
 		}
 
 		switch (unit.quality) {
-		case 4: // magic
+		case 4: // Magic
 			return "ÿc3";
-		case 5: // set
+		case 5: // Set
 			return "ÿc2";
-		case 6: // rare
+		case 6: // Rare
 			return "ÿc9";
-		case 7: // unique
+		case 7: // Unique
 			return "ÿc4";
-		case 8: // crafted
+		case 8: // Crafted
 			return "ÿc8";
 		}
 
@@ -520,7 +518,7 @@ var Pickit = {
 		case 78: // Rejuvenation Potion
 			needPots = 0;
 
-			for (i = 0; i < 4; i += 1) {
+			for (i = 0; i < 4; i++) {
 				if (typeof unit.code === "string" && unit.code.indexOf(Config.BeltColumn[i]) > -1) {
 					needPots += this.beltSize;
 				}
@@ -531,7 +529,7 @@ var Pickit = {
 			if (potion) {
 				do {
 					if (potion.itemType === unit.itemType) {
-						needPots -= 1;
+						needPots--;
 					}
 				} while (potion.getNext());
 			}
@@ -539,7 +537,7 @@ var Pickit = {
 			if (needPots < 1 && this.checkBelt()) {
 				buffers = ["HPBuffer", "MPBuffer", "RejuvBuffer"];
 
-				for (i = 0; i < buffers.length; i += 1) {
+				for (i = 0; i < buffers.length; i++) {
 					if (Config[buffers[i]]) {
 						switch (buffers[i]) {
 						case "HPBuffer":
@@ -567,7 +565,7 @@ var Pickit = {
 							if (potion) {
 								do {
 									if (potion.itemType === pottype && potion.location === 3) {
-										needPots -= 1;
+										needPots--;
 									}
 								} while (potion.getNext());
 							}
@@ -584,7 +582,7 @@ var Pickit = {
 						if (potion.itemType === unit.itemType && ((potion.mode === 0 && potion.location === 3) || potion.mode === 2)) {
 							if (potion.classid < unit.classid) {
 								potion.interact();
-								needPots += 1;
+								needPots++;
 
 								break;
 							}
@@ -609,12 +607,12 @@ var Pickit = {
 
 	checkBelt: function () {
 		var check = 0,
-			item = me.getItem(-1, 2);
+				item = me.getItem(-1, 2);
 
 		if (item) {
 			do {
 				if (item.x < 4) {
-					check += 1;
+					check++;
 				}
 			} while (item.getNext());
 		}
@@ -642,7 +640,7 @@ var Pickit = {
 
 	fastPick: function () {
 		var item, gid, status,
-			itemList = [];
+				itemList = [];
 
 		while (this.gidList.length > 0) {
 			gid = this.gidList.shift();
