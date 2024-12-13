@@ -46,7 +46,7 @@ var Sequencer = {
 
 		if (!isIncluded(sequenceProfileInclude)) {
 			if (!include(sequenceProfileInclude)) {
-				throw new Error("Couldn't find sequences profile '" + sequencesProfile + "'");
+				throw new Error("Couldn't find sequences profile " + sequencesProfile + "");
 			}
 		}
 
@@ -89,12 +89,12 @@ var Sequencer = {
 
 			break;
 		case Sequencer.fail:
-			HordeDebug.logScriptError("Sequencer", "Sequence '" + sequence + ".js' failed");
+			HordeDebug.logScriptError("Sequencer", "Sequence " + sequence + " failed");
 
 			break;
 		case Sequencer.none:
 		default:
-			HordeDebug.logScriptError("Sequencer", "Sequence '" + sequence + ".js' returned unhandled completion state: " + sequenceResult);
+			HordeDebug.logScriptError("Sequencer", "Sequence '" + sequence + " returned unhandled completion state: " + sequenceResult);
 			break;
 		}
 	},
@@ -103,13 +103,13 @@ var Sequencer = {
 		let sequenceTimeline;
 
 		if (timeline == this.before) {
-			sequenceTimeline = "(before mf)";
+			sequenceTimeline = "before mf";
 		} else if (timeline == this.quest) {
-			sequenceTimeline = "(questing)";
+			sequenceTimeline = "questing";
 		} else if (timeline == this.after) {
-			sequenceTimeline = "(after mf)";
+			sequenceTimeline = "after mf";
 		} else {
-			sequenceTimeline = "Unknown: (" + timeline + ")";
+			sequenceTimeline = "Unknown:" + timeline;
 		}
 
 		return sequenceTimeline;
@@ -136,7 +136,7 @@ var Sequencer = {
 
 		if (!isIncluded(sequenceInclude)) {
 			if (!include(sequenceInclude)) {
-				throw new Error("Could not find sequence: '" + sequence + ".js'");
+				throw new Error("Could not find sequence: " + sequence);
 			}
 		}
 
@@ -173,7 +173,7 @@ var Sequencer = {
 			try {
 				sequenceResult = global[sequence](timeline != this.quest);
 			} catch (error) {
-				HordeDebug.logScriptError("Sequencer", "Error while running sequence " + sequence + ".js: " + error + "\n" + error.toSource());
+				HordeDebug.logScriptError("Sequencer", "Error while running sequence " + sequence + ": " + error + "\n" + error.toSource());
 				sequenceResult = this.error;
 				quit();
 			}
@@ -240,7 +240,7 @@ var Sequencer = {
 				sequenceResult = Sequencer.runSequence(sequence, timeline);
 
 				if (sequenceResult === false || sequenceResult === true) {
-					HordeDebug.logScriptError("Sequencer", sequence + ".js: Use 'Sequencer.done()' to complete a sequence or other return values if needed (see Sequencer.js)");
+					HordeDebug.logScriptError("Sequencer", sequence + ": Use 'Sequencer.done()' to complete a sequence or other return values if needed (see Sequencer.js)");
 				}
 			}
 
