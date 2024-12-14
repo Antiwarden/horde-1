@@ -603,7 +603,7 @@ var Town = {
 				// Items for gold, will sell magics, etc. w/o id, but at low levels
 				// magics are often not worth iding.
 				case 4:
-					print("[ÿc2clearInventoryÿc0] Selling " + Pickit.colorItem(item) + item.name.trim());
+					print("[ÿc2clearInventoryÿc0] Selling " + Pickit.itemColor(item) + item.name.trim());
 					Misc.itemLogger("Sold", item);
 					item.sell();
 					break;
