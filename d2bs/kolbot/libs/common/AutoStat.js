@@ -107,12 +107,12 @@ var AutoStat = new function () {
 			"griswold": [], "mavina": [], "naj": [], "orphan": []
 		};
 
-		let j;
+		let i, j;
 		let setStat = 0;
 		let items = me.getItems();
 
 		if (items) {
-			for (let i = 0; i < items.length; i += 1) {
+			for (i = 0; i < items.length; i += 1) {
 				if (items[i].mode === 1 && items[i].quality === 5 && this.validItem(items[i])) {
 					idSwitch:
 					switch (items[i].classid) {
