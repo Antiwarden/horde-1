@@ -747,7 +747,7 @@ var Item = {
 
 						print(
 							"[ÿc7AutoEquipÿc0] Equip [" + bodyLoc[j] + "]: " + Pickit.itemColor(items[0]) + items[0].name.trim() +
-							" ÿc0(tier " + tier + ") | Remove " + Pickit.itemColor(equippedItem) + equippedItem.name.trim() + " ÿc0(tier " + equippedItem.tier + ")");
+							" ÿc0(tier " + tier + ") | Remove " + Pickit.itemColor(equippedItem) + equippedItem.name + " ÿc0(tier " + equippedItem.tier + ")");
 
 						if (this.equip(items[0], bodyLoc[j])) {
 							Misc.logItem("Equipped", me.getItem(-1, -1, gid), "Tier: " + tier);
