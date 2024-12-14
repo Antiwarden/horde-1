@@ -31,7 +31,7 @@
 [name] == smallcharm && [quality] == magic # [maxhp] == 20 && ([coldmindam] == 10 && [coldmaxdam] == 20 || [lightmaxdam] == 71 || [firemindam] == 19 && [firemaxdam] == 29)
 [name] == smallcharm && [quality] == magic # [lightmaxdam] == 99 || [firemindam] == 26 && [firemaxdam] == 42 || [firemindam] == 19 && [firemaxdam] == 29 && [lightmaxdam] == 28 || [firemindam] == 7 && [firemaxdam] == 13 && [lightmaxdam] == 71
 [name] == smallcharm && [quality] == magic # [maxhp] == 20 && [maxmana] == 17 // Max life and mana on a small charm
-[name] == smallcharm && [quality] == magic # [fireresist] >= 3 && [fireresist]+[coldresist]+[lightresist]+[poisonresist] >= 12 && [maxhp] >= 10 // 20 life && 5 @res
+[name] == smallcharm && [quality] == magic # [fireresist]+[coldresist]+[lightresist]+[poisonresist] >= 12 && [maxhp] >= 10 // 20 life && 5 @res
 [name] == smallcharm && [quality] == magic # ([fireresist] == 11 || [lightresist] == 11 || [coldresist] == 11 || [poisonresist] == 11) && [maxhp] == 20 // 20 life & 11 any res
 [name] == smallcharm && [quality] == magic # ([tohit] == 36 || [maxdamage] == 3 || [maxmana] == 17 || [fireresist] == 11 || [coldresist] == 11 || [lightresist] == 11 || [fireresist]+[coldresist]+[lightresist]+[poisonresist] == 20) && ([maxhp] == 20 || [fhr] == 5 || [frw] == 3)
 [name] == smallcharm && [quality] == magic # [poisonmaxdam] == 451
