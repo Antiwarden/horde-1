@@ -403,39 +403,58 @@ var Pickit = {
 	},
 
 	itemColor: function (unit, type) {
-		if (type === undefined) {
-			type = true;
-		}
+    // Check if 'unit' exists and if it's a valid object
+    if (!unit || typeof unit !== "object") {
+      return "ÿc0";
+    }
 
-		if (type) {
-			switch (unit.itemType) {
-			case 4: // Gold
-				return "ÿc4";
-			case 74: // Runes
-				return "ÿc8";
-			case 76: // Healing Potions
-				return "ÿc1";
-			case 77: // Mana Potions
-				return "ÿc3";
-			case 78: // Rejuvination Potions
-				return "ÿc;";
-			}
-		}
+    if (type === undefined) {
+      type = true;
+    }
 
-		switch (unit.quality) {
-		case 4: // Magic
-			return "ÿc3";
-		case 5: // Set
-			return "ÿc2";
-		case 6: // Rare
-			return "ÿc9";
-		case 7: // Unique
-			return "ÿc4";
-		case 8: // Crafted
-			return "ÿc8";
-		}
+    if (type) {
+      // Check if 'unit.itemType' exists
+      if (!("itemType" in unit)) {
+        return "ÿc0";
+      }
 
-		return "ÿc0";
+      switch (unit.itemType) {
+      case 4: // Gold
+        return "ÿc4";
+      case 74: // Runes
+	      return "ÿc8";
+      case 76: // Healing Potions
+        return "ÿc1";
+      case 77: // Mana Potions
+        return "ÿc3";
+      case 78: // Rejuvination Potions
+        return "ÿc;";
+      default:
+				// 'itemType' is unknown, apply default color
+    	  return "ÿc0";
+      }
+    }
+
+    // Check if 'unit.quality' exists
+    if (!("quality" in unit)) {
+      return "ÿc0";
+    }
+
+    switch (unit.quality) {
+    case 4: // Magic
+      return "ÿc3";
+    case 5: // Set
+      return "ÿc2";
+    case 6: // Rare
+      return "ÿc9";
+    case 7: // Unique
+      return "ÿc4";
+    case 8: // Crafted
+      return "ÿc8";
+    default:
+			// 'quality' is unknown, apply default color
+      return "ÿc0";
+    }
 	},
 
 	canPick: function (unit) {
