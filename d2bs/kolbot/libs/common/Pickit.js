@@ -402,59 +402,55 @@ var Pickit = {
 		return quality !== undefined ? qualNames[quality] : "";
 	},
 
+	/**
+	 * Define the color of an item.
+	 * 
+	 * @param {ItemUnit} unit - Item unit
+	 * @param {ItemType} type - Item type
+	 * @returns {String} Color: ÿc0, ÿc1, ÿc2.... , ÿc1;
+	 * @todo Rewrite this so that colors are correctly displayed without errors.
+	 */
 	itemColor: function (unit, type) {
-    // Check if 'unit' exists and if it's a valid object
-    if (!unit || typeof unit !== "object") {
-      return "ÿc0";
-    }
+		if (type === undefined) {
+			type = true;
+		}
 
-    if (type === undefined) {
-      type = true;
-    }
+		try {
+			if (type) {
+				switch (unit.itemType) {
+				case 4: // Gold
+					return "ÿc4";
+				case 74: // Runes
+					return "ÿc8";
+				case 76: // Healing Potions
+					return "ÿc1";
+				case 77: // Mana Potions
+					return "ÿc3";
+				case 78: // Rejuvination Pots
+					return "ÿc;";
+				}
+			}
+		} catch (e) {
+			/**
+			 * Ugh, stupid reference to undefined property unit.itemType ...
+			 * For now, we have to live with the warning until we found a workaround.
+			 */
+		}
 
-    if (type) {
-      // Check if 'unit.itemType' exists
-      if (!("itemType" in unit)) {
-        return "ÿc0";
-      }
+		switch (unit.quality) {
+		case 4: // Magic Items
+			return "ÿc3";
+		case 5: // Set Items
+			return "ÿc2";
+		case 6: // Rare Items
+			return "ÿc9";
+		case 7: // Unique Items
+			return "ÿc4";
+		case 8: // Crafted Items
+			return "ÿc8";
+		}
 
-      switch (unit.itemType) {
-      case 4: // Gold
-        return "ÿc4";
-      case 74: // Runes
-	      return "ÿc8";
-      case 76: // Healing Potions
-        return "ÿc1";
-      case 77: // Mana Potions
-        return "ÿc3";
-      case 78: // Rejuvination Potions
-        return "ÿc;";
-      default:
-				// 'itemType' is unknown, apply default color
-    	  return "ÿc0";
-      }
-    }
-
-    // Check if 'unit.quality' exists
-    if (!("quality" in unit)) {
-      return "ÿc0";
-    }
-
-    switch (unit.quality) {
-    case 4: // Magic
-      return "ÿc3";
-    case 5: // Set
-      return "ÿc2";
-    case 6: // Rare
-      return "ÿc9";
-    case 7: // Unique
-      return "ÿc4";
-    case 8: // Crafted
-      return "ÿc8";
-    default:
-			// 'quality' is unknown, apply default color
-      return "ÿc0";
-    }
+		return "ÿc0"; // Normal Items
 	},
 
 	canPick: function (unit) {
