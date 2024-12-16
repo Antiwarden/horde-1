@@ -461,6 +461,8 @@ function diablo(mfRun) {
 			clearType = true;
 		}
 
+    print("[ÿc8moveToÿc0] :: " + Pather.getAreaName(me.area) + " ÿc8-->ÿc0 Chaos Sanctuary");
+
 		if (!mfRun) {
 			Pather.moveTo(7790, 5544, 10, clearType, clearType); // Start at Entrance.
 			Pather.makePortal();
