@@ -574,15 +574,20 @@ var Pather = {
 		return this.moveTo(presetUnit.roomx * 5 + presetUnit.x + offX, presetUnit.roomy * 5 + presetUnit.y + offY, 3, clearPath, pop);
 	},
 
-	/*
-		Pather.moveToExit(targetArea, use, clearPath);
-		targetArea - area id or array of area ids to move to
-		use - enter target area or last area in the array
-		clearPath - kill monsters while moving
-	*/
+	/**
+ 	 * Moves the character to the exit of a target area, with optional conditions for entering the area and clearing the path.
+ 	 * 
+ 	 * @param {number | number[]} targetArea - The area ID or an array of area IDs to move to.
+ 	 * @param {boolean} use - Whether to enter the target area or the last area in the array.
+ 	 * @param {boolean} clearPath - Whether to kill monsters while moving to the target.
+ 	 * @returns {boolean} True if the target area was reached successfully, false otherwise.
+ 	 * @throws {Error} If there is an issue retrieving the current area.
+ 	 */
 	moveToExit: function (targetArea, use, clearPath) {
-		var i, j, area, exits, targetRoom, dest, currExit,
-			areas = [];
+		var area, exits, targetRoom, dest, currExit,
+				areas = [];
+
+		//print("[ÿc2Start moveToExitÿc0] :: Start moveToExit");
 
 		if (targetArea instanceof Array) {
 			areas = targetArea;
@@ -590,7 +595,9 @@ var Pather = {
 			areas.push(targetArea);
 		}
 
-		for (i = 0; i < areas.length; i += 1) {
+		//print("[ÿc8moveToExitÿc0] :: " + Pather.getAreaName(me.area) + " ÿc8 --> ÿc0" + Pather.getAreaName(targetArea));
+
+		for (let i = 0; i < areas.length; i++) {
 			area = getArea();
 
 			if (!area) {
@@ -603,7 +610,7 @@ var Pather = {
 				return false;
 			}
 
-			for (j = 0; j < exits.length; j += 1) {
+			for (let j = 0; j < exits.length; j++) {
 				currExit = {
 					x: exits[j].x,
 					y: exits[j].y,
@@ -624,27 +631,27 @@ var Pather = {
 					}
 
 					/* i < areas.length - 1 is for crossing multiple areas.
-						In that case we must use the exit before the last area.
-					*/
+						In that case we must use the exit before the last area. */
+					
 					if (use || i < areas.length - 1) {
 						switch (currExit.type) {
-							case 1: // walk through
-								targetRoom = this.getNearestRoom(areas[i]);
+						case 1: // Walk through
+							targetRoom = this.getNearestRoom(areas[i]);
 
-								if (targetRoom) {
-									this.moveTo(targetRoom[0], targetRoom[1]);
-								} else {
-									// might need adjustments
-									return false;
-								}
+							if (targetRoom) {
+								this.moveTo(targetRoom[0], targetRoom[1]);
+							} else {
+								// Might need adjustments
+								return false;
+							}
 
-								break;
-							case 2: // stairs
-								if (!this.openExit(areas[i]) && !this.useUnit(5, currExit.tileid, areas[i])) {
-									return false;
-								}
+							break;
+						case 2: // Stairs
+							if (!this.openExit(areas[i]) && !this.useUnit(5, currExit.tileid, areas[i])) {
+								return false;
+							}
 
-								break;
+							break;
 						}
 					}
 
@@ -652,6 +659,8 @@ var Pather = {
 				}
 			}
 		}
+
+		//print("[ÿc1End moveToExitÿc0] :: moveToExit done");
 
 		if (use) {
 			return typeof targetArea === "object" ? me.area === targetArea[targetArea.length - 1] : me.area === targetArea;
@@ -862,31 +871,36 @@ var Pather = {
 		return targetArea ? me.area === targetArea : me.area !== preArea;
 	},
 
-	/*
-		Pather.moveTo(targetArea, check);
-		targetArea - id of the area to enter
-		check - force the waypoint menu
-	*/
+	/**
+   * Uses a WP to enter to a certain area.
+   * 
+   * @param {number} targetArea - ID of the area to enter
+   * @param {boolean} check - Force using waypoint menu
+   */
 	useWaypoint: function useWaypoint(targetArea, check) {
 		switch (targetArea) {
-			case undefined:
-				throw new Error("useWaypoint: Invalid targetArea parameter: " + targetArea);
-			case null:
-			case "random":
-				check = true;
+		case undefined:
+			throw new Error("useWaypoint: Invalid targetArea parameter: " + targetArea);
+		case null:
+		case "random":
+			check = true;
 
-				break;
-			default:
-				if (typeof targetArea !== "number") {
-					throw new Error("useWaypoint: Invalid targetArea parameter");
-				}
+			break;
+		default:
+			if (typeof targetArea !== "number") {
+				throw new Error("useWaypoint: Invalid targetArea parameter");
+			}
 
-				if (this.wpAreas.indexOf(targetArea) < 0) {
-					throw new Error("useWaypoint: Invalid area");
-				}
+			if (this.wpAreas.indexOf(targetArea) < 0) {
+				throw new Error("useWaypoint: Invalid area");
+			}
 
-				break;
+			break;
 		}
+
+    if (targetArea !== undefined && targetArea !== null && targetArea !== me.area) {
+      print("[ÿc8useWaypointÿc0] :: " + Pather.getAreaName(me.area) + " ÿc8-->ÿc0 " + Pather.getAreaName(targetArea));
+    }
 
 		var i, tick, wp, coord, retry, npc;
 
