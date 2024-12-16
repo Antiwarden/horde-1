@@ -595,7 +595,7 @@ var Pather = {
 			areas.push(targetArea);
 		}
 
-		//print("[ÿc8moveToExitÿc0] :: " + Pather.getAreaName(me.area) + " ÿc8 --> ÿc0" + Pather.getAreaName(targetArea));
+		print("[ÿc8moveToExitÿc0] :: " + Pather.getAreaName(me.area) + " ÿc8 --> ÿc0" + Pather.getAreaName(targetArea));
 
 		for (let i = 0; i < areas.length; i++) {
 			area = getArea();

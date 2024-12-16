@@ -29,7 +29,11 @@ function pits(mfRun) {
 
 		Pather.teleport = true;
 
-		if (!Pather.moveToExit([7, 12], true)) {
+		if (!Pather.moveToExit(7, true)) {
+			throw new Error("Failed to move to Tamoe Highland");
+		}
+
+    if (!Pather.moveToExit(12, true)) {
 			throw new Error("Failed to move to Pit level 1");
 		}
 

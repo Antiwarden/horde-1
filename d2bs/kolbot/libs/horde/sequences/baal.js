@@ -237,7 +237,7 @@ function baal(mfRun) {
 				}
 
 				if (me.area === 131) {
-					Pather.moveToExit([130, 129], true);
+					Travel.moveToExit(130, 129, true, false);
 					Waypoint.clickWP();
 
 					break;
@@ -279,7 +279,7 @@ function baal(mfRun) {
 
 	// Teleporting
 	if (Role.teleportingChar && Party.hasReachedLevel(28)) {
-		Pather.moveToExit([130, 131], true);
+		Travel.moveToExit(130, 131, false);
 		//Pather.moveTo(15121, 5237);
 
 		if (this.monsterChickenCheck()) {
@@ -331,7 +331,7 @@ function baal(mfRun) {
 
 					Pather.useWaypoint(129);
 					Precast.doPrecast(true);
-					Pather.moveToExit([130, 131], true);
+					Travel.moveToExit(130, 131, true, false);
 
 					Pather.teleport = false;
 				} else {
