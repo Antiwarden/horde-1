@@ -43,7 +43,6 @@ var AutoBuildTemplate = {
 			}
 			Config.ManaChicken = 0; // Exit game if mana is less or equal to designated percent.
 			Config.MercChicken = 0; // Exit game if merc's life is less or equal to designated percent.
-			Config.TownHP = 35; // Go to town if life is under designated percent.
 			Config.TownMP = 0; // Go to town if mana is under designated percent.
 			Config.PickRange = 30; // Pick radius
 			Config.FastPick = false; // Check and pick items between attacks
@@ -54,7 +53,7 @@ var AutoBuildTemplate = {
 			Config.FBR = 0; // 0 - disable, 1 to 255 - set value of faster block recovery
 			Config.IAS = 0; // 0 - disable, 1 to 255 - set value of increased attack speed
 			Config.PacketCasting = 0; // 0 = disable, 1 = packet teleport, 2 = full packet casting.
-			Config.PacketShopping = false; // Use packets to shop. Improves shopping speed.
+			Config.PacketShopping = true; // Use packets to shop. Improves shopping speed.
 			Config.WaypointMenu = true;
 			Config.PrimarySlot = -1; // Set to use specific weapon slot as primary weapon slot: -1 = disabled, 0 = slot I, 1 = slot II
 			Config.MFSwitchPercent = 0; // Boss life % to switch to non-primary weapon slot. Set to 0 to disable.
@@ -146,7 +145,6 @@ var AutoBuildTemplate = {
 			Config.AttackSkill = [-1, 47, -1, 47, -1, 0, 0]; // Fire ball
 			Config.LowManaSkill = [36, -1]; // Fire bolt
 			Config.BeltColumn = ["hp", "hp", "mp", "mp"];
-			Config.TownHP = 30;
 		}
 	},
 
@@ -580,9 +578,6 @@ var AutoBuildTemplate = {
 			Config.MPBuffer = 2; // Need lots of mana for Teleport!
 			Config.LowGold = 200000;
 			Config.StashGold = 20000; // Minimum amount of gold to stash.
-			Config.DodgeHP = 100;
-			Config.DodgeRange = 10;
-			Config.UseHp = 90;
 		}
 	},
 

@@ -25,12 +25,30 @@ function LoadConfig() {
 	if (me.playertype) {
 		Config.LifeChicken = 45; // Exit game if life is less or equal to designated percent.
 	} else {
-		Config.LifeChicken = 10; // Exit game if life is less or equal to designated percent.
+    if (me.charlvl < 20) {
+      Config.LifeChicken = 10;
+    } else if (me.charlvl < 40) {
+      Config.LifeChicken = 20;
+    } else if (me.charlvl < 60) {
+      Config.LifeChicken = 30;
+    } else {
+      Config.LifeChicken == 33;
+    }
 	}
+  
 	Config.ManaChicken = 0; // Exit game if mana is less or equal to designated percent.
 	Config.MercChicken = 0; // Exit game if merc's life is less or equal to designated percent.
-	Config.TownHP = 30; // Go to town if life is under designated percent.
-	Config.TownMP = 0; // Go to town if mana is under designated percent.
+  Config.TownMP = 0; // Go to town if mana is under designated percent.
+
+	if (me.charlvl < 20) {
+    Config.TownHP = 20;
+  } else if (me.charlvl < 40) {
+    Config.TownHP = 30;
+  } else if (me.charlvl < 60) {
+    Config.TownHP = 40;
+  } else {
+    Config.TownHP = 50;
+  }
 
 	/* Inventory lock configuration. !!!READ CAREFULLY!!!
 	 * 0 = item is locked and won't be moved. If item occupies more than one slot, ALL of those slots must be set to 0 to lock it in place.
@@ -113,8 +131,8 @@ function LoadConfig() {
 	Config.Recipes.push([Recipe.Token]); // Make Token of Absolution
 
 	Config.Recipes.push([Recipe.Rune, "Ist Rune"]); // Upgrade Ist to Gul
-	//Config.Recipes.push([Recipe.Rune, "Gul Rune"]); // Upgrade Gul to Vex
-	Config.Recipes.push([Recipe.Rune, "Vex Rune"]); // Upgrade Vex to Ohm
+	Config.Recipes.push([Recipe.Rune, "Gul Rune"]); // Upgrade Gul to Vex
+	//Config.Recipes.push([Recipe.Rune, "Vex Rune"]); // Upgrade Vex to Ohm
 
 	// Public game options
 
@@ -132,17 +150,19 @@ function LoadConfig() {
 	Config.LastMessage = ""; // Message or array of messages to say at the end of the run. Use $nextgame to say next game - "Next game: $nextgame" (works with lead entry point)
 	Config.TeleSwitch = false; // Switch to secondary (non-primary) slot when teleporting more than 5 nodes.
 	Config.OpenChests = false; // Open chests. Controls key buying.
-	if (me.charlvl < 30) {
+	
+  if (me.charlvl < 30) {
 		Config.OpenChestsRange = 10; // Helps from straying from team
 	} else if (me.charlvl < 90 && me.charlvl >= 30) {
 		Config.OpenChestsRange = 20; // Default range
 	} else {
 		Config.OpenChestsRange = 30; // Increased range
 	}
+
 	Config.MiniShopBot = true; // Scan items in NPC shops.
-	Config.PacketShopping = false; // Use packets to shop. Improves shopping speed.
+	Config.PacketShopping = true; // Use packets to shop. Improves shopping speed.
 	Config.TownCheck = false; // Go to town if out of potions
-	Config.LogExperience = false; // Print experience statistics in the manager.
+	Config.LogExperience = true; // Print experience statistics in the manager.
 	Config.PingQuit = [{ Ping: 0, Duration: 0 }]; // Quit if ping is over the given value for over the given time period in seconds.
 
 	// Shrine Scanner - scan for shrines while moving.
@@ -207,17 +227,19 @@ function LoadConfig() {
 	};
 
 	Config.Dodge = true; // Move away from monsters that get too close. Don't use with short-ranged attacks like Poison Dagger.
-	Config.DodgeRange = 7; // Distance to keep from monsters.
+	Config.DodgeRange = 8; // Distance to keep from monsters.
 	if (me.charlvl <= 20) {
-		Config.DodgeHP = 60;
-	} else if (me.charlvl <= 30) {
-		Config.DodgeHP = 80;
-	} else if (me.charlvl <= 50) {
+		Config.DodgeHP = 40;
+	} else if (me.charlvl < 40) {
 		Config.DodgeHP = 90;
+	} else if (me.charlvl < 50) {
+		Config.DodgeHP = 95;
+  } else if (me.charlvl < 70) {
+		Config.DodgeHP = 97;
 	} else {
-		Config.DodgeHP = 100;
-		Config.DodgeRange = 8;
-	}
+    Config.DodgeHP = 100;
+  }
+
 	Config.BossPriority = false; // Set to true to attack Unique/SuperUnique monsters first when clearing
 	Config.ClearType = 0; // Monster spectype to kill in level clear scripts (ie. Mausoleum). 0xF = skip normal, 0x7 = champions/bosses, 0 = all
 	Config.TeleStomp = false; // Use merc to attack bosses if they're immune to attacks, but not to physical damage
@@ -237,5 +259,4 @@ function LoadConfig() {
 	}
 
 	Config.StaticList = ["Griswold", "Andariel", "Duriel", "Mephisto", "Izual", "Diablo", "Baal"]; // List of monster NAMES or CLASSIDS to static. Example: Config.StaticList = ["Andariel", 243];
-
 }

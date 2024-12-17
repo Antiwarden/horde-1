@@ -23,16 +23,21 @@ var AutoBuildTemplate = {
 			Config.BeltColumn = ["hp", "hp", "hp", "hp"]; // Keep tons of health potions!
 			Config.MinColumn = [0, 0, 0, 0];
 
-			Config.RejuvBuffer = 4; // Number of rejuvenation potions to keep in inventory
-			Config.HPBuffer = 4; // Number of healing potions to keep in inventory
-			Config.MPBuffer = 0; // Number of healing potions to keep in inventory
+      Config.ScanShrines = [15, 1, 2, 4, 5, 6, 8, 9, 10, 11, 12, 13];
 
-			Config.UseHP = 75;
+			Config.RejuvBuffer = 4;
+			Config.HPBuffer = 4;
+			Config.MPBuffer = 0;
+
+			Config.UseHP = 60;
+      Config.DodgeHP = 40;
+      Config.UseRejuv = 30;
+      Config.TownHP = 20;
+      Config.LifeChicken = 10;
 
 			Config.TownCheck = false; // Don't go to town for more potions
 
 			Config.Dodge = true;
-			Config.DodgeHP = 50;
 			Config.DodgeRange = 5;
 		}
 	},
@@ -102,6 +107,16 @@ var AutoBuildTemplate = {
 		Update: function () {
 			Config.LowGold = 10000;
 			Config.StashGold = 1000;
+
+      Config.RejuvBuffer = 4;
+			Config.HPBuffer = 2;
+			Config.MPBuffer = 0;
+
+      Config.UseHP = 65;
+      Config.DodgeHP = 50;
+      Config.UseRejuv = 40;
+      Config.TownHP = 30;
+      Config.LifeChicken = 15;
 		}
 	},
 
@@ -116,7 +131,6 @@ var AutoBuildTemplate = {
 		SkillPoints: [-1],
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
-			Config.TownHP = 30;
 		}
 	},
 
@@ -176,6 +190,16 @@ var AutoBuildTemplate = {
 		Update: function () {
 			Config.LowGold = 20000;
 			Config.StashGold = 2500;
+
+      Config.RejuvBuffer = 4;
+			Config.HPBuffer = 4;
+			Config.MPBuffer = 0;
+
+      Config.UseHP = 70;
+      Config.DodgeHP = 60;
+      Config.UseRejuv = 50;
+      Config.TownHP = 40;
+      Config.LifeChicken = 20;
 		}
 	},
 
@@ -205,7 +229,7 @@ var AutoBuildTemplate = {
 		StatPoints: [-1, -1, -1, -1, -1],
 		Update: function () {
 			Config.BeltColumn = ["hp", "hp", "mp", "rv"]; // Regular potion settings
-			Config.MinColumn = [2, 2, 2, 0]; // Regular potion settings
+			Config.MinColumn = [1, 1, 1, 0]; // Regular potion settings
 		}
 	},
 
@@ -255,12 +279,15 @@ var AutoBuildTemplate = {
 			Config.LowGold = 40000;
 			Config.StashGold = 5000;
 
-			Config.HPBuffer = 2;
-			Config.MPBuffer = 6;
+      Config.RejuvBuffer = 4;
+			Config.HPBuffer = 4;
+			Config.MPBuffer = 0;
 
-			Config.UseHP = 80;
-
-			Config.TownHP = 40;
+			Config.UseHP = 75;
+      Config.DodgeHP = 70;
+      Config.UseRejuv = 60;
+      Config.TownHP = 50;
+      Config.LifeChicken = 25;
 		}
 	},
 
@@ -334,7 +361,15 @@ var AutoBuildTemplate = {
 			Config.LowGold = 70000;
 			Config.StashGold = 7500;
 
-			Config.TownHP = 45; // Before: 40
+      Config.RejuvBuffer = 4;
+			Config.HPBuffer = 4;
+			Config.MPBuffer = 0;
+
+      Config.UseHP = 80;
+      Config.DodgeHP = 80;
+      Config.UseRejuv = 70;
+      Config.TownHP = 55;
+      Config.LifeChicken = 27;
 		}
 	},
 
@@ -409,16 +444,18 @@ var AutoBuildTemplate = {
 			Config.LowGold = 100000;
 			Config.StashGold = 10000;
 
-			Config.MinColumn = [3, 3, 3, 0]; // Should have a decent belt by now
+			Config.MinColumn = [1, 1, 1, 0]; // Should have a decent belt by now
 			Config.BeltColumn = ["hp", "hp", "mp", "rv"];
 
+      Config.RejuvBuffer = 4;
 			Config.HPBuffer = 4;
-			Config.MPBuffer = 4;
+			Config.MPBuffer = 0;
 
 			Config.UseHP = 85;
-
-			Config.TownHP = 50;
-			Config.DodgeHP = 60;
+      Config.DodgeHP = 85;
+      Config.UseRejuv = 70;
+      Config.TownHP = 55;
+      Config.LifeChicken = 28;
 		}
 	},
 
@@ -492,9 +529,18 @@ var AutoBuildTemplate = {
 		Update: function () {
 			Config.LowGold = 150000;
 			Config.StashGold = 15000;
+      
+      Config.MinColumn = [1, 1, 0, 0];
+      Config.BeltColumn = ["hp", "hp", "rv", "rv"];
 
-			Config.TownHP = 55; // Before: 50
-			Config.DodgeHP = 65; // Before: 60
+			Config.HPBuffer = 4;
+			Config.MPBuffer = 4;
+
+      Config.UseHP = 87;
+      Config.DodgeHP = 87;
+      Config.UseRejuv = 72;
+      Config.TownHP = 55;
+      Config.LifeChicken = 29;
 		}
 	},
 
@@ -568,10 +614,14 @@ var AutoBuildTemplate = {
 			Config.LowGold = 200000;
 			Config.StashGold = 20000;
 
-			Config.TownHP = 60;
-			Config.DodgeHP = 70;
+      Config.RejuvBuffer = 4;
+			Config.HPBuffer = 4;
 
-			Config.UseHP = 90;
+      Config.UseHP = 90;
+      Config.DodgeHP = 90;
+      Config.UseRejuv = 73;
+      Config.TownHP = 55;
+      Config.LifeChicken = 30;
 		}
 	},
 
@@ -647,10 +697,14 @@ var AutoBuildTemplate = {
 			Config.LowGold = 300000;
 			Config.StashGold = 30000;
 
-			Config.MPBuffer = 2; // Before: 4
+      Config.RejuvBuffer = 4;
+			Config.HPBuffer = 4;
 
-			Config.TownHP = 65; // Before: 60
-			Config.DodgeHP = 75; // Before: 70
+			Config.UseHP = 93;
+      Config.DodgeHP = 95;
+      Config.UseRejuv = 74;
+      Config.TownHP = 55;
+      Config.LifeChicken = 33;
 		}
 	},
 

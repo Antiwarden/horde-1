@@ -81,13 +81,13 @@ function LoadConfig() {
 	Config.DroppedItemsAnnounce.Quality = []; // Quality of item to announce. See NTItemAlias.dbl for values. Example: Config.DroppedItemsAnnounce.Quality = [6, 7, 8];
 
 	// Manager Item Log Screen
-	Config.LogKeys = false; // Log keys on item viewer
+	Config.LogKeys = true; // Log keys on item viewer
 	Config.LogOrgans = true; // Log organs on item viewer
-	Config.LogLowRunes = false; // Log low runes (El - Dol) on item viewer
-	Config.LogMiddleRunes = false; // Log middle runes (Hel - Mal) on item viewer
+	Config.LogLowRunes = true; // Log low runes (El - Dol) on item viewer
+	Config.LogMiddleRunes = true; // Log middle runes (Hel - Mal) on item viewer
 	Config.LogHighRunes = true; // Log high runes (Ist - Zod) on item viewer
-	Config.LogLowGems = false; // Log low gems (chipped, flawed, normal) on item viewer
-	Config.LogHighGems = false; // Log high gems (flawless, perfect) on item viewer
+	Config.LogLowGems = true; // Log low gems (chipped, flawed, normal) on item viewer
+	Config.LogHighGems = true; // Log high gems (flawless, perfect) on item viewer
 	Config.SkipLogging = []; // Custom log skip list. Set as three digit item code or classid. Example: ["tes", "ceh", 656, 657] will ignore logging of essences.
 	Config.ShowCubingInfo = true; // Show cubing messages on console
 
@@ -135,9 +135,9 @@ function LoadConfig() {
 		Config.OpenChestsRange = 30; // Increased range
 	}
 	Config.MiniShopBot = true; // Scan items in NPC shops.
-	Config.PacketShopping = false; // Use packets to shop. Improves shopping speed.
+	Config.PacketShopping = true; // Use packets to shop. Improves shopping speed.
 	Config.TownCheck = false; // Go to town if out of potions
-	Config.LogExperience = false; // Print experience statistics in the manager.
+	Config.LogExperience = true; // Print experience statistics in the manager.
 	Config.PingQuit = [{ Ping: 0, Duration: 0 }]; // Quit if ping is over the given value for over the given time period in seconds.
 
 	// Shrine Scanner - scan for shrines while moving.
