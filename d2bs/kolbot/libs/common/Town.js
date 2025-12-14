@@ -184,6 +184,8 @@ var Town = {
 			549, // Horadric Cube
 			92,  // Staff of Kings
 			521, // Viper Amulet
+      89,  // Horadric Malus
+      90,  // Hellforge Hammer
 			91,  // Horadric Staff
 			552, // Book of Skill
 			545, // Potion of Life
