@@ -169,6 +169,44 @@ var Town = {
 		}
 	},
 
+  /**
+	 * Check whether an item is a quest/cannot-be-sold item
+	 * @param {ItemUnit} item
+	 * @returns {boolean}
+	 */
+	isQuestItem: function (item) {
+		if (!item) return false;
+
+		// Known quest/important item classids (kept in clearInventory previously)
+		const questIds = [
+			524, // Scroll of Inifuss
+			525, // Key to Cairn Stones
+			549, // Horadric Cube
+			92,  // Staff of Kings
+			521, // Viper Amulet
+			91,  // Horadric Staff
+			552, // Book of Skill
+			545, // Potion of Life
+			546, // A Jade Figurine
+			547, // The Golden Bird
+			548, // Lam Esen's Tome
+			553, // Khalim's Eye
+			554, // Khalim's Heart
+			555, // Khalim's Brain
+			173, // Khalim's Flail
+			174, // Khalim's Will
+			644, // Malah's Potion
+			646  // Scroll of Resistance
+		];
+
+		if (questIds.indexOf(item.classid) > -1) return true;
+
+		// Keys and quest-like item types should not be sold
+		if (item.itemType === 41) return true; // Key
+
+		return false;
+	},
+
 	/**
      * @description Start a task and return the NPC Unit
      * @param {string} task 
@@ -605,7 +643,13 @@ var Town = {
 				case 4:
 					print("[ÿc2clearInventoryÿc0] Selling " + Pickit.itemColor(item) + item.name.trim());
 					Misc.itemLogger("Sold", item);
-					item.sell();
+
+					if (!this.isQuestItem(item)) {
+						item.sell();
+					} else {
+						print("[ÿc9Townÿc0] Skip selling of quest item: " + Pickit.itemColor(item) + item.name.trim());
+					}
+
 					break;
 				case -1:
 					if (tome) {
