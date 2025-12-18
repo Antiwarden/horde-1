@@ -643,13 +643,12 @@ var Town = {
 				// Items for gold, will sell magics, etc. w/o id, but at low levels
 				// magics are often not worth iding.
 				case 4:
-					print("[ÿc2clearInventoryÿc0] Selling " + Pickit.itemColor(item) + item.name.trim());
-					Misc.itemLogger("Sold", item);
-
 					if (!this.isQuestItem(item)) {
+            print("[ÿc2clearInventoryÿc0] Selling " + Pickit.itemColor(item) + item.name.trim());
+					  Misc.itemLogger("Sold", item);
 						item.sell();
 					} else {
-						print("[ÿc9Townÿc0] Skip selling of quest item: " + Pickit.itemColor(item) + item.name.trim());
+						print("[ÿc9Townÿc0] Skip selling quest item: " + item.name.trim());
 					}
 
 					break;
@@ -665,7 +664,6 @@ var Town = {
 
 								if (tpTome) {
 									tpTomePos = { x: tpTome.x, y: tpTome.y };
-
 									tpTome.sell();
 									delay(500);
 								}
@@ -719,9 +717,13 @@ var Town = {
 						break;
 					default:
 						if (!keepItems) {
-							print("[ÿc2clearInventoryÿc0] Selling " + Pickit.itemColor(item).trim() + item.name.trim());
-							Misc.itemLogger("Sold", item);
-							item.sell();
+              if (!this.isQuestItem(item)) {
+							  print("[ÿc2clearInventoryÿc0] Selling " + Pickit.itemColor(item) + item.name.trim());
+							  Misc.itemLogger("Sold", item);
+							  item.sell();
+              } else {
+                print("[ÿc9Townÿc0] Skip selling quest item: " item.name.trim());
+              }
 
 							let timer = getTickCount() - this.sellTimer; // Shop speedup test
 
@@ -1123,10 +1125,14 @@ var Town = {
 
 							break;
 						default:
-							print("[ÿc2clearInventoryÿc0] Selling " + Pickit.itemColor(newItem).trim() + newItem.name.trim());
-							Misc.itemLogger("Sold", newItem, "Gambling");
-							me.overhead("Sell: " + newItem.name);
-							newItem.sell();
+              if (!this.isQuestItem(newItem)) {
+							  print("[ÿc2clearInventoryÿc0] Selling " + Pickit.itemColor(newItem) + newItem.name.trim());
+							  Misc.itemLogger("Sold", newItem, "Gambling");
+							  me.overhead("Sell: " + newItem.name);
+							  newItem.sell();
+              } else {
+                print("[ÿc9Townÿc0] Skip selling quest item: " + Pickit.itemColor(newItem) + newItem.name.trim());
+              }
 
 							if (!Config.PacketShopping) {
 								delay(500);
@@ -1889,9 +1895,13 @@ var Town = {
 		for (let i = 0; !!items && i < items.length; i += 1) {
 			if (items[i].location === 3 && items[i].mode === 0 && items[i].itemType === 22) {
 				if (getUIFlag(0xC) || (Config.PacketShopping && getInteractedNPC() && getInteractedNPC().itemcount > 0)) { // Might as well sell the item if already in shop
-					print("[ÿc2clearInventoryÿc0] Selling " + Pickit.itemColor(items[i]).trim() + items[i].name.trim());
-					Misc.itemLogger("Sold", items[i]);
-					items[i].sell();
+          if (!this.isQuestItem(items[i])) {
+					  print("[ÿc2clearInventoryÿc0] Selling " + Pickit.itemColor(items[i]) + items[i].name.trim());
+					  Misc.itemLogger("Sold", items[i]);
+					  items[i].sell();
+          } else {
+            print("[ÿc9Townÿc0] Skip selling quest item: " + Pickit.itemColor(items[i]) + items[i].name.trim());
+          }
 				} else {
 					Misc.itemLogger("Dropped", items[i], "clearScrolls");
 					items[i].drop();
@@ -2044,11 +2054,15 @@ var Town = {
 					}
 					
 					if (getUIFlag(0xC) || (Config.PacketShopping && getInteractedNPC() && getInteractedNPC().itemcount > 0)) { // Might as well sell the item if already in shop
-						print("[ÿc2clearInventoryÿc0] Selling " + Pickit.itemColor(items[i]).trim() + items[i].name.trim());
-						Misc.itemLogger("Sold", items[i]);
-						items[i].sell();
+            if (!this.isQuestItem(items[i])) {
+						  print("[ÿc2clearInventoryÿc0] Selling " + Pickit.itemColor(items[i]) + items[i].name.trim());
+						  Misc.itemLogger("Sold", items[i]);
+						  items[i].sell();
+            } else {
+              print("[ÿc9Townÿc0] Skip selling quest item: " + Pickit.itemColor(items[i]) + items[i].name.trim());
+            }
 					} else {
-						print("[ÿc2clearInventoryÿc0] Dropped " + Pickit.itemColor(items[i]).trim() + items[i].name.trim());
+						print("[ÿc2clearInventoryÿc0] Dropped " + Pickit.itemColor(items[i]) + items[i].name.trim());
 						Misc.itemLogger("Dropped", items[i], "clearInventory");
 						items[i].drop();
 					}
@@ -2056,10 +2070,14 @@ var Town = {
 					break;
 				case 4: // Sell item
 					try {
-						print("[ÿc2clearInventoryÿc0] Selling " + Pickit.itemColor(items[i]).trim() + items[i].name.trim() + " (lowGold)");
-						this.initNPC("Shop", "clearInventory");
-						Misc.itemLogger("Sold", items[i]);
-						items[i].sell();
+            if (!this.isQuestItem(items[i])) {
+						  print("[ÿc2clearInventoryÿc0] Selling " + Pickit.itemColor(items[i]) + items[i].name.trim() + " (lowGold)");
+						  this.initNPC("Shop", "clearInventory");
+						  Misc.itemLogger("Sold", items[i]);
+						  items[i].sell();
+            } else {
+              print("[ÿc9Townÿc0] Skip selling quest item: " + Pickit.itemColor(items[i]) + items[i].name.trim());
+            }
 					} catch (e) {
 						print(e);
 					}
