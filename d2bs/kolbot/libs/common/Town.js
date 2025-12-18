@@ -722,7 +722,7 @@ var Town = {
 							  Misc.itemLogger("Sold", item);
 							  item.sell();
               } else {
-                print("[ÿc9Townÿc0] Skip selling quest item: " item.name.trim());
+                print("[ÿc9Townÿc0] Skip selling quest item: " + item.name.trim());
               }
 
 							let timer = getTickCount() - this.sellTimer; // Shop speedup test
