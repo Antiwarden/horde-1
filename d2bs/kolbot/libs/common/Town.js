@@ -1399,7 +1399,6 @@ var Town = {
 
 				break;
 			case "buyQuiver":
-				bowCheck = Attack.usingBow();
 				let bowCheck = Attack.usingBow();
 
 				if (bowCheck) {
