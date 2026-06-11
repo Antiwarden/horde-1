@@ -231,7 +231,7 @@ function main() {
 	if (Config.MinGameTime && getTickCount() - startTime < Config.MinGameTime * 1000) {
 		try {
 			Town.goToTown();
-			quitTime = Math.round(((startTime + (Config.MinGameTime * 1000)) - getTickCount()) / 1000);
+			const quitTime = Math.round(((startTime + (Config.MinGameTime * 1000)) - getTickCount()) / 1000);
 			while (getTickCount() - startTime < Config.MinGameTime * 1000) {
 				me.overhead("Stalling for " + quitTime + " second" + (quitTime != 1 ? "s" : ""));
 				delay(1000);
