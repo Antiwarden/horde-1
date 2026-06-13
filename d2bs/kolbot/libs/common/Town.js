@@ -2071,7 +2071,7 @@ var Town = {
 				case 4: // Sell item
 					try {
             if (!this.isQuestItem(items[i])) {
-						  print("[ÿc2clearInventoryÿc0] Selling " + Pickit.itemColor(items[i]) + items[i].name.trim() + " (lowGold)");
+						  print("[ÿc2clearInventoryÿc0] Selling " + Pickit.itemColor(items[i]) + items[i].name.trim() + " ÿc0(lowGold)");
 						  this.initNPC("Shop", "clearInventory");
 						  Misc.itemLogger("Sold", items[i]);
 						  items[i].sell();
