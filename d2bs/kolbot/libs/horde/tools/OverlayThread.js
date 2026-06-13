@@ -212,13 +212,17 @@ function main() {
 		hideFlags = [0x09, 0x0C, 0x0D, 0x01, 0x02, 0x0F, 0x18, 0x19, 0x1A, 0x21];
 
 	//addEventListener("keyup", this.keyEvent);
-	addEventListener("scriptmsg",
-		function (msg) {
-			var args = msg.split(' ');
-			if (args[0] === "playtime") {
-				Playtime.onReceivePlaytime(args[1]);
-			}
-		});
+	addEventListener("scriptmsg", function (msg) {
+		if (typeof msg !== "string") {
+			msg = JSON.stringify(msg);
+		}
+			
+		const args = msg.split(" ");
+		if (args[0] === "playtime") {
+			Playtime.onReceivePlaytime(args[1]);
+		}
+	});
+	
 	while (true) {
 
 		//this.revealArea(me.area);
