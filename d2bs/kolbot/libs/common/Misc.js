@@ -2133,10 +2133,19 @@ var Experience = {
 		[7205, 45002, 67503], [7309, 45908, 68862], [7413, 46814, 70221], [7517, 47720, 71580], [7621, 48626, 72939], [7725, 49532, 74298], [7829, 50438, 75657],
 		[7933, 51344, 77016], [8037, 52250, 78375], [8141, 53156, 79734], [8245, 54062, 81093], [8349, 54968, 82452], [8453, 55874, 83811], [160000, 160000, 160000]
 	],
+	
 	// Percent progress into the current level. Format: xx.xx%
 	progress: function () {
-		var level = me.getStat(12);
-		return level === 99 || level === undefined ? 0 : (((me.getStat(13) - this.totalExp[level]) / this.nextExp[level]) * 100).toFixed(2);
+    	const level = me.getStat(12);
+
+    	if (level === undefined || level === 99) {
+      		return 0;
+    	}
+
+    	const total = this.totalExp[level] != null ? this.totalExp[level] : 0;
+    	const next  = this.nextExp[level] != null ? this.nextExp[level] : 1;
+
+    	return (((me.getStat(13) - total) / next) * 100).toFixed(2);
 	},
 
 	// Total experience gained in current run
