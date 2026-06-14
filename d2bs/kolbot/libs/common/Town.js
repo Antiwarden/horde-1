@@ -378,20 +378,21 @@ var Town = {
 
 		for (let i = 0; i < 4; i += 1) {
 			if (col[i] > 0) {
-				let useShift = this.shiftCheck(col, beltSize);
+				//let useShift = this.shiftCheck(col, beltSize);
 				let pot = this.getPotion(npc, Config.BeltColumn[i]);
 
 				if (pot) {
 					//print("ÿc2column ÿc0" + i + "ÿc2 needs ÿc0" + col[i] + " ÿc2potions");
 
 					// Shift+buy will trigger if there's no empty columns or if only the current column is empty
+					/*
 					if (useShift) {
 						pot.buy(true);
-					} else {
+					} else { */
 						for (let j = 0; j < col[i]; j += 1) {
 							pot.buy(false);
 						}
-					}
+					//}
 				}
 			}
 
