@@ -638,7 +638,7 @@
 //[name] == umrune # # [MaxQuantity] == 1
 //[name] == malrune # # [MaxQuantity] == 1
 
-[name] >= istrune && [name] <= zodrune
+[name] >= lemrune && [name] <= zodrune
 
 //[name] == keyofhate # # [maxquantity] == 3
 //[name] == keyofterror # # [maxquantity] == 3
