@@ -203,9 +203,9 @@ function main() {
 	include("common/Prototypes.js");
 	include("horde/tools/Playtime.js");
 	include("horde/settings/Settings.js");
-	print("load overlay helper");
+	//print("load overlay helper");
 	//load("libs/horde/tools/overlayhelper.js");
-	print("Horde Overlay Thread Loaded.");
+	//print("Horde Overlay Thread Loaded.");
 
 
 	var i,
