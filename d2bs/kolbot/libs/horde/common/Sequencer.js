@@ -162,6 +162,7 @@ var Sequencer = {
 			
 			//run sequence
 			this.preSequence(sequence, timeline);
+			print("[ÿc7Sequencerÿc0] Next up: pre-" + sequence);
 			
 			scriptBroadcast("run " + sequence + " " + this.runTimeline);
 			try {
@@ -173,6 +174,7 @@ var Sequencer = {
 			}
 			
 			this.postSequence(sequence, timeline, sequenceResult);
+			print("[ÿc7Sequencerÿc0] Next up: post-" + sequence);
 		}
 		
 		return sequenceResult;
