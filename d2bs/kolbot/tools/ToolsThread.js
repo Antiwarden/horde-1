@@ -428,6 +428,10 @@ function main() {
 					(Config.QuitList instanceof Array && Config.QuitList.indexOf(name1) > -1)) {
 				print(name1 + (mode === 0 ? " timed out" : " left"));
 
+				// we need to stall in town, not on the battlefield
+				this.togglePause();
+				!me.inTown && Town.goToTown();
+
 				if (typeof Config.QuitListDelay !== "undefined" && typeof quitListDelayTime === "undefined" && Config.QuitListDelay.length > 0) {
 					Config.QuitListDelay.sort(function(a, b) { return a - b });
 					quitListDelayTime = getTickCount() + rand(Config.QuitListDelay[0] * 1e3, Config.QuitListDelay[1] * 1e3);
