@@ -11,7 +11,8 @@ Go to ``horde-1\d2bs\kolbot\libs\config...`` and rename the files ``Sorceress.te
 Go to ``horde-1\d2bs\kolbot\libs\horde\settings\teams...`` and open the team configuration file called ``Reset.js``. Add profile names, account names, and character names there. Quick tip: Using identical names for both profiles and characters makes life easier.
 
 # Step 3:
-Add cd-keys, profiles, etc. manually in the D2BS-Manager or simply copy over your old ``profiles.json`` and/or ``cdkeys.json`` into ``horde-1\data``.
+Add cd-keys and profiles in the D2BS-Manager, or simply copy over your old ``profiles.json`` and/or ``cdkeys.json`` into ``horde-1\data``.<br>
+**Note**: All profiles must have specified a game name and password; without it, characters cannot create games.
 
 # Step 4:
 If you have not done already, create four characters on different accounts and on the same realm.
