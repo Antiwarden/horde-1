@@ -112,7 +112,7 @@ const Sequences = {
 
 			// Act 4
 			"izual": {}, // optional
-			"hellforge": { skipIf: "!Party.hasReachedLevel(80)" }, // optional
+			//"hellforge": { skipIf: "!Party.hasReachedLevel(80)" }, // optional
 			"diablo": { stopAfterIf: "!Party.hasReachedLevel(80)" },
 
 			// Act 5
