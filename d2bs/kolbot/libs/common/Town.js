@@ -197,6 +197,7 @@ var Town = {
 			555, // Khalim's Brain
 			173, // Khalim's Flail
 			174, // Khalim's Will
+			551, // Mephisto's Soulstone
 			644, // Malah's Potion
 			646  // Scroll of Resistance
 		];
