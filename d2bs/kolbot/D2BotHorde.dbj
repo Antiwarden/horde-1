@@ -657,7 +657,7 @@ MainSwitch:
 				chatActionsDone = true;
 
 				ControlAction.timeoutDelay("Chat delay", StarterConfig.ChatActionsDelay * 1e3);
-				say("/j " + StarterConfig.JoinChannel);
+				//say("/j " + StarterConfig.JoinChannel);
 				delay(1000);
 
 				if (StarterConfig.FirstJoinMessage !== "") {
