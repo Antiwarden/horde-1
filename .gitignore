@@ -4,6 +4,8 @@
 # Track these hidden files
 !.gitignore
 !.gitmodules
+!.gitattributes
+!.editorconfig
 
 # Do not track user generated data
 d2bs/kolbot/data/secure/*.txt
